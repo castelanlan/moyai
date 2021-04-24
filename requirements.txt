@@ -1,0 +1,7 @@
+discord
+discord_slash
+asyncio
+aiosqlite
+owotext
+pygicord
+aiohttp

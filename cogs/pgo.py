@@ -1,0 +1,73 @@
+import asyncio
+
+import discord
+from discord.ext import commands
+
+EMBED_BODY_COLOR = 0x2F3136
+
+
+class pgo(commands.Cog):
+
+    def __init__(self, client):
+        self.client = client
+        # self.moyai_cult = self.client.get_guild(802202917737463829)
+        # self.available_raids_channel = discord.utils.get(self.moyai_cult.channels, name = 'available-raids')
+        # self.pgo_category = discord.utils.get(self.moyai_cult.categories, name = 'Pokemon Go Raids Moment')
+
+    async def pogo_embed_maker(self, ctx, name, description=None):
+        """
+            Makes a embed with the specified name
+            Takes:
+                `ctx`: Standard context object from discord.
+                `name`: String, name of the pokemon raid
+                `description`: Optional, string, extra info the user may or may not add.
+        """
+        available_raids_channel = discord.utils.get(
+            ctx.guild.channels, name='available-raids')
+        embed = discord.Embed(
+            title=f'{name} raid', description=f'A new {name} raid appeared! React with an 🗿 to join')
+        embed.set_footer(
+            text='Bot made exclusively for the Moyai Cult server 🗿😎')
+        embed.set_author(name=ctx.author.display_name,
+                         icon_url=ctx.author.avatar_url)
+        if description is not None:
+            embed.add_field(name='Extra info:', value=description)
+        return embed
+
+    async def delete_channel(self, ctx):
+        """
+            Deletes a channel.
+            Takes: 
+                `ctx`: standard context object from discord.
+        """
+        await ctx.send(embed=discord.Embed(description='️️⚠️ This channel will be deleted in 5 seconds ⚠️', color=EMBED_BODY_COLOR))
+        await asyncio.sleep(5)
+        await ctx.channel.delete(reason='RAID SYSTEM - DELETE')
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        if payload.channel_id == 830956915462242346 and payload.user_id != 815562681267650589 and str(payload.emoji) == '🗿':
+            ...
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        if str(payload.emoji) == '🗿':
+            ...
+
+    @commands.command(aliases=['cr'])
+    @commands.is_owner()
+    async def create_raid_channel(self, ctx, pokemon, *, desc=None):
+        available_raids_channel = discord.utils.get(
+            ctx.guild.channels, name='available-raids')
+        raid_message = await available_raids_channel.send(embed=await self.pogo_embed_maker(ctx, pokemon, desc))
+        await ctx.channel.category.create_text_channel(f'{pokemon}-raid-by-{ctx.author.name}', reason=f'RAID SYSTEM - {ctx.author} made a {pokemon} raid.')
+        await raid_message.add_reaction('🗿')
+
+    @commands.command(aliases=['dlt'])
+    @commands.is_owner()
+    async def delete_raid_channel(self, ctx):
+        await self.delete_channel(ctx)
+
+
+def setup(client):
+    client.add_cog(pgo(client))

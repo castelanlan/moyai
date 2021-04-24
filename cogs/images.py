@@ -1,0 +1,32 @@
+from PIL import Image
+
+from discord import File
+from discord.ext import commands
+
+
+class images(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @commands.command()
+    async def roll(self, ctx, delta: int):
+        """Roll an image sideways."""
+        image = Image.open('c:/users/gabri/castelanbot/cogs/moyai.png')
+        xsize, ysize = image.size
+
+        delta = delta % xsize
+        if delta == 0:
+            return image
+
+        part1 = image.crop((0, 0, delta, ysize))
+        part2 = image.crop((delta, 0, xsize, ysize))
+        image.paste(part1, (xsize-delta, 0, xsize, ysize))
+        image.paste(part2, (0, 0, xsize-delta, ysize))
+
+        image.save('moyai_altered.png')
+
+        await ctx.send('bruh', file=File('moyai_altered.png'))
+
+
+def setup(client):
+    client.add_cog(images(client))
