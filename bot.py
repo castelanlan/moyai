@@ -20,6 +20,8 @@ import discord
 import logging
 import monke_patch
 
+from private import token
+
 from discord.ext import commands
 from discord_slash import SlashCommand
 
@@ -33,14 +35,9 @@ def get_prefix(client, message):
         return '.'
 
 
-client = commands.AutoShardedBot(
-    command_prefix=get_prefix, help_command=None,
-    intents=discord.Intents.all(), case_insensitive=True,
-    allowed_mentions=discord.AllowedMentions.none()
-)
+client = commands.AutoShardedBot(command_prefix=get_prefix, help_command=None, intents=discord.Intents.all(),
+                                 case_insensitive=True, allowed_mentions=discord.AllowedMentions.none())
 slash = SlashCommand(client, sync_commands=True, sync_on_cog_reload=True)
-logger = logging.getLogger('discord')
-logger.setLevel(logging.INFO)
 
 
 @client.command(aliases=['prefix'])
@@ -145,4 +142,6 @@ for filename in os.listdir('./cogs'):
         print(f'Loaded {filename}')
 
 if __name__ == '__main__':
-    client.run('ODE1NTYyNjgxMjY3NjUwNTg5.YDuN7w.CL6oFFnlb37Cf_SLk1yR4ZhaC0A')
+    client.logger = logging.getLogger('discord')
+    client.logger.setLevel(logging.INFO)
+    client.run(token)

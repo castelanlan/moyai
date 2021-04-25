@@ -237,14 +237,14 @@ class chatreact(commands.Cog):
             return
         else:
             logging.error(f'{error.__class__.__name__}: {error}')
-            raise error
             return
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx):
         if ctx.prefix == None:
             return
-        print(
+        # print(f'{ctx.prefix}{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
+        logging.info(
             f'{ctx.prefix}{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
 
     @commands.Cog.listener()

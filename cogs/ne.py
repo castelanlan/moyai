@@ -1,6 +1,7 @@
 import random
 import discord
 import aiosqlite
+import asyncio
 
 from discord.ext import commands
 
@@ -102,16 +103,25 @@ class ne(commands.Cog):
                 await errored(ctx)
                 return
 
-    def check_connection(f):
-        def predicate(ctx):  # this can also be a coroutine
-            if 1:  # placeholder name, do your own checking here
-                return True
-            return False
+    # def check_connection(self, ctx):
+    #     try:
+    #         asyncio.run(self.load_db())
+    #         return True
+    #     except Exception as error:
+    #         print(error)
+    #         return False
+    #     # return commands.check(predicate)
 
+    def check_connection(self):
+        async def predicate(ctx):
+            try:
+                print(bool(await load_db()))
+            except Exception as error:
+                raise error
         return commands.check(predicate)
 
     @commands.command()
-    @check_connection
+    @commands.check(check_connection)
     async def abc(self, ctx, *, a):
         await ctx.send(a)
 
