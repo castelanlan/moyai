@@ -226,7 +226,8 @@ class chatreact(commands.Cog):
             usage
         """
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(embed=discord.Embed(description=f'Please pass in all arguments. Missing argument: {error.param}', color=0x2F3136))
+            bruh = str(error.param).split(':')
+            await ctx.send(embed=discord.Embed(description=f'Please pass in all arguments. Missing argument: {bruh[0]}', color=0x2F3136))
             return
         elif isinstance(error, commands.CommandNotFound):
             return

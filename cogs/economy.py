@@ -174,10 +174,10 @@ class economy(commands.Cog):
             return
         else:
             number = random.randint(0, 100)
-            if number > 55:
-                await cursor.execute(f'UPDATE main SET balance = balance + {round(amount * 2)} WHERE user_id = {ctx.author.id}')
+            if number > 70:
+                await cursor.execute(f'UPDATE main SET balance = balance + {amount} WHERE user_id = {ctx.author.id}')
                 await db.commit()
-                await ctx.send(embed=discord.Embed(description=f'You bet {amount} stones, and got back {round(amount * 2)}. Now you have {user_money[0] + round(amount * 1.5)} stones <:MoyPepeAndMoyai:808347852513476619> ', color=discord.Color.green()))
+                await ctx.send(embed=discord.Embed(description=f'You bet {amount} stones, and got back {amount}. Now you have {user_money[0] + amount} stones <:MoyPepeAndMoyai:808347852513476619> ', color=discord.Color.green()))
             else:
                 await cursor.execute(f'UPDATE main SET balance = balance - {round(amount)} WHERE user_id = {ctx.author.id}')
                 await db.commit()
