@@ -249,7 +249,7 @@ class chatreact(commands.Cog):
             f'{ctx.prefix}{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
 
     @commands.Cog.listener()
-    async def on_slash_command(ctx):
+    async def on_slash_command(self, ctx):
         print(
             f'{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
 

@@ -30,10 +30,10 @@ class extra(commands.Cog):
             print(a)
             # embed = (discord.Embed(description = f'This is page {x}').add_field(name = 'lel', value = f'```html\n{abcde[x]}```'))
 
-    @cog_ext.cog_slash(name='bro', description='This is oxi testing slash commands :moyai:', guild_ids=[802202917737463829])
-    async def bro(self, ctx: context):
+    @cog_ext.cog_slash(name='topgg', description='Sends the top.gg vote link', guild_ids=[802202917737463829])
+    async def topgg(self, ctx: context):
         print(ctx)
-        await ctx.send('Yay it worked', hidden=True)
+        await ctx.send('[Here it is](https://top.gg/servers/802202917737463829/vote)', hidden=False)
 
     # @cog_ext.cog_slash(name = 'InvalidName', guild_ids = [802202917737463829])
     # async def __bro(self, ctx : context):

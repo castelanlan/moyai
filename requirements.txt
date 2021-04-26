@@ -1,7 +1,8 @@
 discord
-discord_slash
+discord-py-slash-command
 asyncio
 aiosqlite
 owotext
 pygicord
 aiohttp
+beautifulsoup4
