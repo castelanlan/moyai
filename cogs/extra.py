@@ -1,14 +1,13 @@
-import discord
-import requests
-import aiohttp
-from pygicord import Paginator
-from bs4 import BeautifulSoup as bs
 import re
+import discord
+import aiohttp
 from io import BytesIO
+from pygicord import Paginator
 from fuzzywuzzy import fuzz
 from discord.ext import commands
+from bs4 import BeautifulSoup as bs
 from discord_slash import cog_ext, context
-from pprint import pprint
+
 
 class extra(commands.Cog):
     def __init__(self, client):
@@ -65,16 +64,10 @@ class extra(commands.Cog):
 
     @commands.command()
     async def docs(self, ctx, *, text):
-        # if text.startswith('slash '):
-        #     base_url = 'https://discord-py-slash-command.readthedocs.io/en/latest/genindex.html'
-        #     text
-        # elif text.startswith('py'):
-        #     ...
         await ctx.message.add_reaction('✅')
         text = text.split('|')
         base_url = 'https://discordpy.readthedocs.io/en/stable/'
         docs = 'dpy'
-        # fu = True
         try:
             if text[1]:
                 if 'slash' in text[1]:
@@ -84,7 +77,7 @@ class extra(commands.Cog):
                     docs = 'py'
                     base_url = 'https://docs.python.org/3/'
         except IndexError:
-            ...
+           pass # gaming
 
         resp, keys = await self.search_from_sphinx(text[0].lower(), docs)
         if not resp:
@@ -103,7 +96,7 @@ class extra(commands.Cog):
                 page_embed = base_embed.copy()
             link = base_url + x
             try:            
-                page_embed.add_field(name=f'{count} | Confidence: {keys[idx]}', value=f"[`{x.split('#')[1]}`]({link})", inline=False)
+                page_embed.add_field(name=f'{count}', value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
             except IndexError:
                 continue
             resp.remove(x)
@@ -114,34 +107,11 @@ class extra(commands.Cog):
             return await ctx.send("No result found.")
         pags = Paginator(pages = embed_list)
         await pags.start(ctx)
-        # await ctx.send(result)
 
 
-    @cog_ext.cog_slash(name='topgg', description='Sends the top.gg vote link', guild_ids=[802202917737463829])
+    @cog_ext.cog_slash(name='topgg', description='Sends this server\'s top.gg link', guild_ids=[802202917737463829])
     async def topgg(self, ctx: context):
-        print(ctx)
-        await ctx.send('[Here it is](https://top.gg/servers/802202917737463829/vote)', hidden=False)
-
-    # @cog_ext.cog_slash(name = 'InvalidName', guild_ids = [802202917737463829])
-    # async def __bro(self, ctx : context):
-    #     await ctx.send('whoever reads this is epic', hidden = True)
-
-    @commands.command()
-    async def web(self, ctx, *, url):
-        await ctx.message.add_reaction('✅')
-        if not url.startswith('https://'):
-            url = 'https://' + url
-        sdasd = requests.get(url)
-        asdfsdf = bs(str(sdasd.content), features='html.parser')
-        xd = BytesIO(asdfsdf.prettify().encode())
-        await ctx.send(file=discord.File(xd, f'{url}.html'))
-
-    @commands.command()
-    @commands.is_owner()
-    async def moment(self, ctx):
-        msg = await ctx.send(embed=discord.Embed())
-        await msg.edit(suppress=True)
-        await msg.add_reaction('🗿')
+        await ctx.send('[Here it is](https://top.gg/servers/802202917737463829/vote)')
 
     async def get_member_from_chapeu(self, ctx, count):
         msgs = []
@@ -158,32 +128,9 @@ class extra(commands.Cog):
                 if arg.startswith('^'):
                     count = arg.count('^')
                     members = await self.get_member_from_chapeu(ctx, count)
-                    print(count)
-                    print(len(members))
-                    print(members)
                     await ctx.send(members[count - 1])
-                    #count = arg.count('^')
-                    #await ctx.send(f'gamings: {count}')
             except Exception as errror:
                 raise errror
-
-#    @commands.Cog.listener()
-#    async def on_message(self, message):
-#        """
-#            Playing with wait_for
-#        """
-#        if message.content.startswith('.moment'):
-#            channel = message.channel
-#            await channel.send('Send me that 👍 reaction, mate')
-#            try:
-#                reaction, user = await self.client.wait_for('reaction_add', timeout=60.0, check=lambda reaction, user: reaction.emoji == '👍')
-#            except asyncio.TimeoutError:
-#                await channel.send('👎')
-#            else:
-#                await channel.send('👍')
-#                print(reaction)
-#                print(user)
-
 
 def setup(client):
     client.add_cog(extra(client))

@@ -3,6 +3,7 @@ import json
 import discord
 import random
 from discord.ext import commands
+from io import BytesIO
 
 class reddit(commands.Cog):
     def __init__(self, client):
@@ -93,7 +94,6 @@ class reddit(commands.Cog):
                 except Exception as e:
                     await ctx.send(f'```py\n{e.__class__.__name__}: {e}```')
 
-
     @commands.command()
     async def test(self, ctx):
         await ctx.trigger_typing()
@@ -106,6 +106,18 @@ class reddit(commands.Cog):
                     print(res)
                 except Exception as e:
                     await ctx.send(f'```py\n{e.__class__.__name__}: {e}```')
+
+    @commands.command()
+    async def web(self, ctx, *, url):
+        await ctx.message.add_reaction('✅')
+        if not url.startswith('https://'):
+            url = 'https://' + url
+        async with aiohttp.ClientSession() as cs:
+            async with cs.get(url) as res:
+                sdasd = await res.read()
+        asdfsdf = bs(str(sdasd.content), features='html.parser')
+        xd = BytesIO(asdfsdf.prettify().encode())
+        await ctx.send(file=discord.File(xd, f'{url}.html'))
 
 
     @sub.error

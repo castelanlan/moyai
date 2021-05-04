@@ -56,7 +56,13 @@ class ne(commands.Cog):
         except Exception as error:
             await errored(ctx, e)
 
-    async def check_moneys(self, ctx, user=None):
+    async def check_connection(self, ctx) -> None:
+        try:
+            await load_db()
+        except Exception as e:
+            pass
+
+    async def check_moneys(self, ctx, user=None) -> int:
         """
             Checks if the user is in the db, and
             if the user isn't, adds them to it.
@@ -81,6 +87,7 @@ class ne(commands.Cog):
             await ctx.send("""**Hi, I see you're new...** :thinking:\nWelcome to Moyai Bot:moyai:, here your objective is to get as much Moyai stones as possible! Do `.help economy` to see all available commands""")
             return
 
+
     async def add_to_bal(self, ctx, amount: int, user=None):
         """
             Adds money to a user balance
@@ -103,6 +110,14 @@ class ne(commands.Cog):
             except Exception as e:
                 await errored(ctx, e)
                 return
+
+    async def moneys_and_connection(self, ctx, user = None):
+        """
+            Checks if there is a connection and if the user
+            is registered on the database.
+        """
+        await ...
+
 
     # def check_connection(self, ctx):
     #     try:
