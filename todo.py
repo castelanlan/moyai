@@ -6,3 +6,4 @@ TODO: "fix <:MoyTroll:808014499844063294> and <:MoyTrollChad:808014499918905354>
 "TODO: "help cummand" - oxi#8347"
 "TODO: "hw" - astro#1848"
 "TODO: ":MoySunglasses: (like now)" - astro#1848"
+"TODO: ":MoySheesh: (ice in my veins pose, look it up)" - astro#1848"

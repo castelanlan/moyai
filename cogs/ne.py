@@ -94,13 +94,14 @@ class ne(commands.Cog):
                 user = ctx.message.author
 
             await cursor.execute(f'UPDATE main SET balance = balance + {amount} WHERE user_id ={user.id}')
+            await ctx.send('Welcome to the Moyai blablabalb')
 
         except Exception as e:
             try:
                 await load_db()
                 await add_to_bal(ctx, amount, user)
             except Exception as e:
-                await errored(ctx)
+                await errored(ctx, e)
                 return
 
     # def check_connection(self, ctx):
@@ -121,7 +122,7 @@ class ne(commands.Cog):
         return commands.check(predicate)
 
     @commands.command()
-    @commands.check(check_connection)
+    @commands.before_invoke(check_connection)
     async def abc(self, ctx, *, a):
         await ctx.send(a)
 
@@ -140,8 +141,9 @@ class ne(commands.Cog):
         #        brief='Shows how many Moyai Stones you have.',
         #        description="Will show you how many Moyai Stones you have, if you want to see someone else's stones, you can do .balof <person>"
     )
+    @commands.before_invoke(check_connection)
     async def _balance(self, ctx):
-        await check_moneys(ctx.author)
+        # await check_moneys(ctx.author)
         await cursor.execute(f'SELECT balance FROM main WHERE user_id={USER_ID}')
         result_userBal = await cursor.fetchone()
         embed = discord.Embed(

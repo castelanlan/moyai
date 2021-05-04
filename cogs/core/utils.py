@@ -30,3 +30,7 @@ class bruh:
         await ctx.send(embed = discord.Embed(description = '️️⚠️ This channel will be deleted in 5 seconds ⚠️', color = EMBED_BODY_COLOR))
         await asyncio.sleep(5)
         await ctx.channel.delete(reason = 'RAID SYSTEM - DELETE')
+
+# class memba(commands.MemberConverter):
+#    async def convert(self, ctx, arg):
+

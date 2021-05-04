@@ -1,11 +1,3 @@
-.idea
-.vscode
-
-economy.sql
-moyai_altered.png
-start.bat
-user_prefixes.json
-private.py
-
 __pycache__/
+.vscode
 cogs/__pycache__
