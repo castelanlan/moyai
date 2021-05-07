@@ -108,6 +108,58 @@ class extra(commands.Cog):
         pags = Paginator(pages = embed_list)
         await pags.start(ctx)
 
+    @commands.command(aliases = 'do')
+    async def _docs(self, ctx, *, text):
+        await ctx.message.add_reaction('✅')
+        text = text.split('|')
+        base_url = 'https://discordpy.readthedocs.io/en/stable/'
+        docs = 'dpy'
+
+        try:
+            if text[1]:
+                if 'slash' in text[1]:
+                    base_url = 'https://discord-py-slash-command.readthedocs.io/en/latest/'
+                    docs = 'slash'
+                elif 'py' in text[1]:
+                    docs = 'py'
+                    base_url = 'https://docs.python.org/3/'
+
+        except IndexError:
+           pass # gaming
+
+        resp, keys = await self.search_from_sphinx(text[0].lower(), docs)
+
+        if not resp:
+            await ctx.send(embed = (discord.Embed(title = 'No results found :(', color = 0x2f3136)).set_footer(text = ctx.author, icon_url = ctx.author.avatar_url))
+            return
+
+        base_embed = (discord.Embed(title="Search", color= 0x2f3136)).set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        idx = 0
+        count = 1
+        embed_list = []
+        for_res = resp.copy()
+        page_embed = base_embed.copy()
+        desrip = ''
+        for x in for_res:
+            if count != 1 and count % 5 == 1:
+                embed_list.append(page_embed)
+                page_embed = base_embed.copy()
+            link = base_url + x
+            try:            
+                page_embed.add_field(name=f'{count}', value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
+            except IndexError:
+                continue
+            resp.remove(x)
+            count += 1
+            idx += 1
+        embed_list.append(page_embed)
+
+        if not embed_list:
+            return await ctx.send("No result found.")
+
+        pags = Paginator(pages = embed_list)
+        await pags.start(ctx)
+
 
     @cog_ext.cog_slash(name='topgg', description='Sends this server\'s top.gg link', guild_ids=[802202917737463829])
     async def topgg(self, ctx: context):
@@ -134,4 +186,3 @@ class extra(commands.Cog):
 
 def setup(client):
     client.add_cog(extra(client))
-

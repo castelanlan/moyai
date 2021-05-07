@@ -100,7 +100,7 @@ class otherstuff(commands.Cog):
         try:
             if content is not None:
                 with open('todo.py', 'at') as f:
-                    f.write(f'"TODO: "{content}" - {ctx.author}"\n')
+                    f.write(f'"TODO: {content} - {ctx.author}"\n')
             await ctx.send('Done:sunglasses:', delete_after = 5)
         except:
             await ctx.send(':thinkinh: Hmmm, something went wrong, ping oxi')
