@@ -159,19 +159,24 @@ class chatreact(commands.Cog):
             name='User: ', value=f'<@{str(payload.user_id)}>', inline=False)
         embed.add_field(name='Channel: ',
                         value=f'<#{str(payload.channel_id)}>', inline=False)
-        # embed.add_field(name = 'Event type: ', value = str(payload.event_type), inline = False)
-        # embed.add_field(name = 'Guild id: ', value = str(payload.guild_id), inline = False)
-        # embed.add_field(name = 'Member: ', value = f'<@{str(payload.member)}>', inline = False)
+
         await channel.send(embed=embed)
         member = payload.member
         guild_member = self.client.get_guild(payload.guild_id)
-        nsfw_role = guild_member.get_role(817510639068643418)
-        pogo_role = guild_member.get_role(816992672954449921)
+
         if payload.channel_id == 825101719474143293:
             if str(payload.emoji) == '🗿':
+                nsfw_role = guild_member.get_role(817510639068643418)
                 await member.add_roles(nsfw_role)
             elif str(payload.emoji) == '😎':
+                pogo_role = guild_member.get_role(816992672954449921)
                 await member.add_roles(pogo_role)
+            elif str(payload.emoji) == '🤖':
+                bott_role = guild_member.get_role(840371852588220416)
+                await member.add_roles(bott_role)
+            elif str(payload.emoji) == '⚒️':
+                serv_role = guild_member.get_role(836312355029647450)
+                await member.add_roles(serv_role)
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):

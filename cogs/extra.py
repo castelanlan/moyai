@@ -96,7 +96,8 @@ class extra(commands.Cog):
                 page_embed = base_embed.copy()
             link = base_url + x
             try:            
-                page_embed.add_field(name=f'{count}', value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
+                page_embed.add_field(name=f"""‎‎ """, value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
+                
             except IndexError:
                 continue
             resp.remove(x)
@@ -108,7 +109,7 @@ class extra(commands.Cog):
         pags = Paginator(pages = embed_list)
         await pags.start(ctx)
 
-    @commands.command(aliases = 'do')
+    @commands.command(aliases = ['do'])
     async def _docs(self, ctx, *, text):
         await ctx.message.add_reaction('✅')
         text = text.split('|')
@@ -140,18 +141,23 @@ class extra(commands.Cog):
         for_res = resp.copy()
         page_embed = base_embed.copy()
         desrip = ''
+
         for x in for_res:
             if count != 1 and count % 5 == 1:
                 embed_list.append(page_embed)
                 page_embed = base_embed.copy()
             link = base_url + x
             try:            
-                page_embed.add_field(name=f'{count}', value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
+                # page_embed.add_field(name=f'{count}', value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
+                desrip = desrip + f'[`{x.split("#")[1]}`]({link}) Confidence: **{keys[idx]}**%\n'
             except IndexError:
                 continue
+
             resp.remove(x)
             count += 1
             idx += 1
+            page_embed.description = desrip
+
         embed_list.append(page_embed)
 
         if not embed_list:
