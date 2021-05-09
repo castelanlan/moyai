@@ -1,10 +1,22 @@
 import discord
 from discord.ext import commands
-
+import asyncio
 
 class mod(commands.Cog):
     def __init__(self, client):
         self.client = client
+
+#     async def parse_time(self, ctx, time):
+#         amount_to_sleep = time.split('|')
+#     
+#         if 'min' or 'm' or 'minutes' in amount_to_sleep[1]:
+#             amount_to_sleep = amount_to_sleep * 60
+#             return amount_to_sleep
+# 
+#         elif 'seconds' or 'secs' or 'sec' or 's' in amount_to_sleep[1]:
+#             return amount_to_sleep
+# 
+#             return amount_to_sleep
 
     @commands.command(aliases=['purge'])
     @commands.has_permissions(manage_messages=True)
@@ -15,23 +27,29 @@ class mod(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def mute(self, ctx, member: discord.Member):
+    async def mute(self, ctx, member: discord.Member, time = None):
         role = ctx.guild.get_role(804465223335411722)
-        try:
+
+        if time is None:
             await member.add_roles(role, atomic=True)
             await ctx.send(f'Member {member.mention} has been muted :pensive:')
-        except Exception as e:
-            await ctx.send(f'<@762084217185763369>\n```py\n{e.__class__.__name__}: {e}```', allowed_mentions=discord.AllowedMentions.all())
+        else:
+            try:
+                await member.add_roles(role, atomic = True)
+                await ctx.send(f'Member {member.mention} has been muted :pensive:')
+                await asyncio.sleep(int(time) * 60)
+                await member.remove_roles(role, atomic = True)
+                await ctx.send(f'Member {member.mention} has been unmuted :sunglasses:')
+
+            except ValueError:
+                await ctx.send('That\'s not a number chief :moyai:', delete_after = 5)                
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def unmute(self, ctx, member: discord.Member):
         role = ctx.guild.get_role(804465223335411722)
-        try:
-            await member.remove_roles(role, atomic=True)
-            await ctx.send(f'Member {member.mention} has been unmuted :sunglasses:')
-        except Exception as e:
-            await ctx.send(f'<@762084217185763369>\n```py\n{e.__class__.__name__}: {e}```', allowed_mentions=discord.AllowedMentions.all())
+        await member.remove_roles(role, atomic=True)
+        await ctx.send(f'Member {member.mention} has been unmuted :sunglasses:')
 
     @commands.command()
     @commands.has_permissions(kick_members=True)

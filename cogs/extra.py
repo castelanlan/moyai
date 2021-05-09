@@ -9,14 +9,30 @@ from bs4 import BeautifulSoup as bs
 from discord_slash import cog_ext, context
 
 
+class memba(commands.MemberConverter):
+    async def convert(self, ctx, count):
+        if count:
+            try:
+                super().convert(ctx, argument)
+                if count:
+                    msgs = []
+                    async for m in ctx.channel.history(limit = count, oldest_first = False):
+                        msgs.append(m.author.display_name)
+                    return msgs[count - 1]
+                else:
+                    return ctx.author
+        else:
+            return ctx.author
+
+
 class extra(commands.Cog):
     def __init__(self, client):
         self.client = client
 
     async def search_from_sphinx(self, keyword, docs = 'dpy', fuzzSort=True) -> list:
         """
-        Searches sphinx for a pages matching keyword
         :param url: url of sphinx docs
+        Searches sphinx for a pages matching keyword
         :param keyword: the keyword to search for
         :param fuzzSort: should fuzzy matching/sorting be used
         :return: list of matches
@@ -109,67 +125,11 @@ class extra(commands.Cog):
         pags = Paginator(pages = embed_list)
         await pags.start(ctx)
 
-    @commands.command(aliases = ['do'])
-    async def _docs(self, ctx, *, text):
-        await ctx.message.add_reaction('✅')
-        text = text.split('|')
-        base_url = 'https://discordpy.readthedocs.io/en/stable/'
-        docs = 'dpy'
-
-        try:
-            if text[1]:
-                if 'slash' in text[1]:
-                    base_url = 'https://discord-py-slash-command.readthedocs.io/en/latest/'
-                    docs = 'slash'
-                elif 'py' in text[1]:
-                    docs = 'py'
-                    base_url = 'https://docs.python.org/3/'
-
-        except IndexError:
-           pass # gaming
-
-        resp, keys = await self.search_from_sphinx(text[0].lower(), docs)
-
-        if not resp:
-            await ctx.send(embed = (discord.Embed(title = 'No results found :(', color = 0x2f3136)).set_footer(text = ctx.author, icon_url = ctx.author.avatar_url))
-            return
-
-        base_embed = (discord.Embed(title="Search", color= 0x2f3136)).set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-        idx = 0
-        count = 1
-        embed_list = []
-        for_res = resp.copy()
-        page_embed = base_embed.copy()
-        desrip = ''
-
-        for x in for_res:
-            if count != 1 and count % 5 == 1:
-                embed_list.append(page_embed)
-                page_embed = base_embed.copy()
-            link = base_url + x
-            try:            
-                # page_embed.add_field(name=f'{count}', value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
-                desrip = desrip + f'[`{x.split("#")[1]}`]({link}) Confidence: **{keys[idx]}**%\n'
-            except IndexError:
-                continue
-
-            resp.remove(x)
-            count += 1
-            idx += 1
-            page_embed.description = desrip
-
-        embed_list.append(page_embed)
-
-        if not embed_list:
-            return await ctx.send("No result found.")
-
-        pags = Paginator(pages = embed_list)
-        await pags.start(ctx)
-
 
     @cog_ext.cog_slash(name='topgg', description='Sends this server\'s top.gg link', guild_ids=[802202917737463829])
     async def topgg(self, ctx: context):
         await ctx.send('[Here it is](https://top.gg/servers/802202917737463829/vote)')
+
 
     async def get_member_from_chapeu(self, ctx, count):
         msgs = []
@@ -180,15 +140,8 @@ class extra(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def tes(self, ctx, arg):
-        if arg:
-            try:
-                if arg.startswith('^'):
-                    count = arg.count('^')
-                    members = await self.get_member_from_chapeu(ctx, count)
-                    await ctx.send(members[count - 1])
-            except Exception as errror:
-                raise errror
+    async def tes(self, ctx, arg : memba):
+        await ctx.send(f'You said {arg.name}')
 
 def setup(client):
     client.add_cog(extra(client))

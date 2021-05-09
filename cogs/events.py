@@ -241,8 +241,11 @@ class chatreact(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             print(f'Cooldown - {error.retry_after}')
             return
+        elif isinstance(error, commands.NotOwner):
+            await ctx.send('Yo wtf u tryna do :moyai:', delete_after = 7)
+            return
         else:
-            logging.error(f'{error.__class__.__name__}: {error}')
+            self.client.logger.error(f'{error.__class__.__name__}: {error}')
             return
 
     @commands.Cog.listener()
@@ -250,12 +253,12 @@ class chatreact(commands.Cog):
         if ctx.prefix == None:
             return
         # print(f'{ctx.prefix}{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
-        logging.info(
+        self.client.logger.info(
             f'{ctx.prefix}{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
 
     @commands.Cog.listener()
     async def on_slash_command(self, ctx):
-        print(
+        self.client.logger.info(
             f'{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
 
 
