@@ -21,6 +21,8 @@ class memba(commands.MemberConverter):
                     return msgs[count - 1]
                 else:
                     return ctx.author
+            except:
+                ...
         else:
             return ctx.author
 
