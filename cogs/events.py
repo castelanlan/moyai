@@ -2,13 +2,34 @@ import discord
 import asyncio
 import logging
 from datetime import datetime
-from discord.ext import commands
+from discord.ext import commands, tasks
 from bot import get_prefix
+import json
 
-
-class chatreact(commands.Cog):
+class events(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.dbl_stuff.start()
+
+    @commands.command(aliases = ['stop'])
+    async def cancel_loop(self, ctx):
+        await self.dbl_stuff.stop()
+        self.client.logger.info('Stopping loop')
+
+    @commands.command(aliases = ['start'])
+    async def start_loop(self, ctx):
+        await self.dbl_stuff.start()
+        self.client.logger.info('Starting loop')
+
+    @tasks.loop(seconds = 15)
+    async def dbl_stuff(self):
+        with open('buffer.json', 'r') as f:
+            print(f.read())
+        ...
+
+    @dbl_stuff.before_loop
+    async def before_dbl_stuff(self):
+        await self.client.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_connect(self):
@@ -263,4 +284,4 @@ class chatreact(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(chatreact(client))
+    client.add_cog(events(client))
