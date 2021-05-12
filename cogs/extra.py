@@ -7,7 +7,7 @@ from fuzzywuzzy import fuzz
 from discord.ext import commands
 from bs4 import BeautifulSoup as bs
 from discord_slash import cog_ext, context
-
+from discord_slash.utils.manage_commands import create_option
 
 class memba(commands.MemberConverter):
     async def convert(self, ctx, count):
@@ -30,6 +30,23 @@ class memba(commands.MemberConverter):
 class extra(commands.Cog):
     def __init__(self, client):
         self.client = client
+
+    async def do_string_sort(self, a : str) -> str:
+        list(a)
+        helpa = ''
+
+        for i in a:
+            helpa += i
+
+        helpa = list(helpa)
+        helpa.sort()
+
+        helpa2 = ''
+
+        for i in helpa:
+            helpa2 += i
+
+        return helpa2
 
     async def search_from_sphinx(self, keyword, docs = 'dpy', fuzzSort=True) -> list:
         """
@@ -114,7 +131,7 @@ class extra(commands.Cog):
                 page_embed = base_embed.copy()
             link = base_url + x
             try:            
-                page_embed.add_field(name=f"""‎‎ """, value=f"[`{x.split('#')[1]}`]({link}) Confidence: {keys[idx]}%", inline=False)
+                page_embed.add_field(name=f"""‎‎ """, value=f"[`{x.split('#')[1]}`]({link}) Confidence: **{keys[idx]}**%", inline=False)
                 
             except IndexError:
                 continue
@@ -127,23 +144,25 @@ class extra(commands.Cog):
         pags = Paginator(pages = embed_list)
         await pags.start(ctx)
 
+    @commands.command(name = 'sort')
+    async def _sort(self, ctx, *, words):
+        try:
+            a = await self.do_string_sort(words)
+            await ctx.send(a)
+        except Exception as e:
+            await ctx.send(e)
+
+    @cog_ext.cog_slash(name = 'sort', description = 'sorts every letter in your message alphabetically', options = [create_option('message', 'The message to be sorted', 3, True)], guild_ids = [802202917737463829])
+    async def sortt(self, ctx : context, message):
+        try:
+            a = await self.do_string_sort(message)
+            await ctx.send(a)
+        except Exception as e:
+            await ctx.send(e)
 
     @cog_ext.cog_slash(name='topgg', description='Sends this server\'s top.gg link', guild_ids=[802202917737463829])
     async def topgg(self, ctx: context):
         await ctx.send('[Here it is](https://top.gg/servers/802202917737463829/vote)')
-
-
-    async def get_member_from_chapeu(self, ctx, count):
-        msgs = []
-        async for m in ctx.channel.history(limit = count, oldest_first = False):
-            msgs.append(m.author.display_name)
-
-        return msgs
-
-    @commands.command()
-    @commands.is_owner()
-    async def tes(self, ctx, arg : memba):
-        await ctx.send(f'You said {arg.name}')
 
 def setup(client):
     client.add_cog(extra(client))

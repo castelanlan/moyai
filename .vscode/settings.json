@@ -1,3 +1,6 @@
 {
-    "python.linting.enabled": false
+    "python.linting.PylintEnabled": false,
+    "python.analysis.disabled": [
+        "unresolved-import"
+    ]
 }

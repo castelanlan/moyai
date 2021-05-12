@@ -24,7 +24,8 @@ class events(commands.Cog):
     @tasks.loop(seconds = 15)
     async def dbl_stuff(self):
         with open('buffer.json', 'r') as f:
-            print(f.read())
+            res = f.read()
+            old_time = res['time']
         ...
 
     @dbl_stuff.before_loop
