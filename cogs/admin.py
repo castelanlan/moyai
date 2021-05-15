@@ -43,7 +43,9 @@ class admin(commands.Cog):
             You got to be really careful tho.
         """
         await ctx.trigger_typing()
+
         try:
+            cmd_1 = cmd
             fn_name = "_eval_expr"
             cmd = cmd.strip("```' ")
             cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
@@ -51,6 +53,7 @@ class admin(commands.Cog):
             parsed = ast.parse(body)
             body = parsed.body[0].body
             self.insert_returns(body)
+
             env = {
                 'cmd': cmd,
                 'ctx': ctx,
@@ -64,16 +67,27 @@ class admin(commands.Cog):
                 'client': self.client,
                 '__import__': __import__
             }
+
             exec(compile(parsed, filename="<ast>", mode="exec"), env)
+
             result = await eval(f"{fn_name}()", env)
+
             if len(str(result)) > 1980:
                 file = BytesIO(str(result).encode())
                 await ctx.send(file=discord.File(file, 'result.py'))
                 return
-            await ctx.send(f'```py\n{result}\n```')
+
+            epic_embed = discord.Embed(description = 'a')
+            epic_embed.add_field(name = 'Input:', value = f'```py\n{cmd_1}\n```', inline = False)
+            epic_embed.add_field(name = 'Return value:', value = f'```py\n{result}\n```', inline = False)
+            await ctx.send(embed = epic_embed)
+
+            #await ctx.send(f'```py\n{result}\n```')
+
         except Exception as e:
             if str(e) == '400 Bad Request (error code: 50006): Cannot send an empty message':
                 return
+
             else:
                 await ctx.send(f'\n```py\n{e.__class__.__name__}: {e}\n```')
 

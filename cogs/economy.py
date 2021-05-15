@@ -263,13 +263,19 @@ class economy(commands.Cog):
         balances = await cursor.fetchall()
         cursor = await db.execute(f'SELECT user_id FROM main ORDER BY balance DESC')
         names = await cursor.fetchall()
+        print(names)
         embed = discord.Embed(
             title='Moyai Leaderboard 🗿🙏',
             description='\n',
             color=0x29cc54
         )
         for x in range(0, 10):
-            bruh = ctx.guild.get_member(names[x][0]).display_name
+            try:
+                bruh = ctx.guild.get_member(names[x][0]).display_name
+
+            except AttributeError as error:
+                bruh = '`This user left 😔`'
+            
             embed.add_field(
                 name=f'#{x + 1} {bruh}', value=f'{balances[x][0]} stones 🗿', inline=False)
         await ctx.send(embed=embed)

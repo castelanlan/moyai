@@ -33,6 +33,7 @@ class mod(commands.Cog):
         if time is None:
             await member.add_roles(role, atomic=True)
             await ctx.send(f'Member {member.mention} has been muted :pensive:')
+            
         else:
             try:
                 await member.add_roles(role, atomic = True)

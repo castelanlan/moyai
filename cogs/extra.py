@@ -58,14 +58,19 @@ class extra(commands.Cog):
         """
         if docs == 'dpy':
             url = 'https://discordpy.readthedocs.io/en/stable/genindex.html'
+
         elif docs == 'slash':
             url = 'https://discord-py-slash-command.readthedocs.io/en/latest/genindex.html'
+
         elif docs == 'py':
             url = 'https://docs.python.org/3/genindex-all.html'
+
         keyword = keyword.lower()
+        
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as res:
                 text = await res.read()
+
         soup = bs(text, "html.parser")
         if fuzzSort:
             # utilises fuzzy string matching to determine which page is most likely to be what the user wants
@@ -115,9 +120,11 @@ class extra(commands.Cog):
            pass # gaming
 
         resp, keys = await self.search_from_sphinx(text[0].lower(), docs)
+
         if not resp:
             await ctx.send(embed = (discord.Embed(title = 'No results found :(', color = 0x2f3136)).set_footer(text = ctx.author, icon_url = ctx.author.avatar_url))
             return
+
         base_embed = discord.Embed(title="Search", color= 0x2f3136)
         base_embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         count = 1
@@ -125,22 +132,29 @@ class extra(commands.Cog):
         page_embed = base_embed.copy()
         for_res = resp.copy()
         idx = 0
+
         for x in for_res:
+
             if count != 1 and count % 5 == 1:
                 embed_list.append(page_embed)
                 page_embed = base_embed.copy()
             link = base_url + x
+
             try:            
                 page_embed.add_field(name=f"""‎‎ """, value=f"[`{x.split('#')[1]}`]({link}) Confidence: **{keys[idx]}**%", inline=False)
                 
             except IndexError:
                 continue
+
             resp.remove(x)
             count += 1
             idx += 1
+
         embed_list.append(page_embed)
+
         if not embed_list:
             return await ctx.send("No result found.")
+
         pags = Paginator(pages = embed_list)
         await pags.start(ctx)
 
