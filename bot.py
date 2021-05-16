@@ -139,7 +139,7 @@ async def _reload(ctx, extension='all'):
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
-        print(f'Loaded {filename}')
+        client.logger.info(f'Loaded {filename}')
 
 if __name__ == '__main__':
     client.logger = logging.getLogger('discord')
