@@ -9,11 +9,12 @@ import json
 class events(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.dbl_stuff.start()
+    #    self.dbl_stuff.start()
 
     @commands.command(aliases = ['stop'])
     async def cancel_loop(self, ctx):
-        await self.dbl_stuff.stop()
+        self.dbl_stuff.stop()
+        await ctx.send('uhhh stopping the loop i guess')
         self.client.logger.info('Stopping loop')
 
     @commands.command(aliases = ['start'])

@@ -6,7 +6,7 @@ from discord.ext import commands
 EMBED_BODY_COLOR = 0x2F3136
 
 
-class pgo(commands.Cog):
+class pgo(commands.Cog, command_attrs=dict(hidden=True)):
 
     def __init__(self, client):
         self.client = client

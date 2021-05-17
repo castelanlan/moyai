@@ -57,11 +57,8 @@ class admin(commands.Cog):
             env = {
                 'cmd': cmd,
                 'ctx': ctx,
-                'sex': 'sex',
                 'body': body,
-                'bot': ctx.bot,
                 'src': getsource,
-                'parsed': parsed,
                 'discord': discord,
                 'commands': commands,
                 'client': self.client,

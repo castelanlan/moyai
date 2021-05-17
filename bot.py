@@ -24,7 +24,7 @@ from private import token
 
 from discord.ext import commands
 from discord_slash import SlashCommand
-
+import sys
 
 def get_prefix(client, message):
     with open('user_prefixes.json', 'r') as f:
@@ -38,6 +38,8 @@ def get_prefix(client, message):
 client = commands.AutoShardedBot(command_prefix=get_prefix, help_command=None, intents=discord.Intents.all(),
                                  case_insensitive=True, allowed_mentions=discord.AllowedMentions.none())
 slash = SlashCommand(client, sync_commands=True, sync_on_cog_reload=True)
+logging.basicConfig(level = logging.INFO)
+client.logger = logging.getLogger('discord')
 
 
 @client.command(aliases=['prefix'])
@@ -142,6 +144,4 @@ for filename in os.listdir('./cogs'):
         client.logger.info(f'Loaded {filename}')
 
 if __name__ == '__main__':
-    client.logger = logging.getLogger('discord')
-    client.logger.setLevel(logging.INFO)
     client.run(token)

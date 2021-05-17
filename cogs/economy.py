@@ -162,13 +162,18 @@ class economy(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 100, commands.BucketType.user)
-    async def bet(self, ctx, amount: int):
+    async def bet(self, ctx, amount):
         cursor = await db.execute(f'SELECT balance FROM main where user_id = {ctx.author.id}')
         user_money = await cursor.fetchone()
 
         if user_money is None:
             await ctx.send("You can't do this command! You haven't started your journey!")
+        
+        if amount == 'all':
+            amount = int(user_money[0]) - 1
+        else:
+            amount = int(amount)
+
         if amount >= int(user_money[0]):
             await ctx.send(embed=discord.Embed(description='You don\'t have all that money <:MoyPensive:806407627721932810>', color=0x2F3136))
             return

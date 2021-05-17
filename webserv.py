@@ -6,14 +6,24 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def respond():
-    new_json = request.json
-    new_json['time'] = time.time()
-    print(new_json)
     try:
-        with open('buffer.json', 'w+') as f:
-            json.dump(new_json, f, indent = 4)
-            f.close()
-        return Response(status=200)
+        with open('buffer.json', 'w+') as file:
+            try:
+                old_file = json.load(file)
+                old_time = old_file['time'] 
+            except Exception as e:
+                print(e)
+                old_time = 0
+
+            new_json = request.json
+            new_json['old_time'] = old_time
+            new_json['time'] = time.time()
+
+            json.dump(new_json, file, indent = 4)
+            file.close()
+
+            return Response(status=200)
+
     except Exception as e:
         raise e
 
