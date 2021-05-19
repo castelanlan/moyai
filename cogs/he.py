@@ -7,9 +7,7 @@ class Help(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(name = 'help')
-    @commands.is_owner()
-    async def _help2(self, ctx):
+    async def do_normal_help(self, ctx):
         try:
             _embed = (discord.Embed(description=f"My prefix for you is `{get_prefix(self.client, ctx.message)[0]}` 😎🙏", color = ctx.me.color)
                         .set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -43,6 +41,13 @@ class Help(commands.Cog):
             await ctx.send(embed=_embed)
         except Exception as error:
             raise error
+
+    @commands.command(name = 'help', invoke_without_command = True)
+    async def _help2(self, ctx, helpme = None):
+        if helpme is None:
+            await self.do_normal_help(ctx)
+        else:
+            ...
 
 def setup(client):
     client.add_cog(Help(client))

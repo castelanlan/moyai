@@ -7,7 +7,7 @@ from datetime import datetime
 from discord.ext import commands
 
 
-class otherstuff(commands.Cog):
+class Info(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.client.launch_time = datetime.utcnow()
@@ -114,11 +114,10 @@ class otherstuff(commands.Cog):
                          icon_url=f'{ctx.guild.icon_url}')
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['owner', 'author'])
+    @commands.command(aliases=['owner', 'author'], hidden = True)
     async def whomadeyou(self, ctx):
         donecommandschannel = self.client.get_channel(796218151879835658)
         await ctx.send(f"I was made by {self.client.owner.name}")
-        await donecommandschannel.send('Command whomadeyou done')
 
     @commands.command()
     async def ping(self, ctx):
@@ -154,4 +153,4 @@ class otherstuff(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(otherstuff(client))
+    client.add_cog(Info(client))

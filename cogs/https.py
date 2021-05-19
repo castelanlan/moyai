@@ -5,7 +5,7 @@ import random
 from discord.ext import commands
 from io import BytesIO
 
-class reddit(commands.Cog):
+class Web(commands.Cog):
     def __init__(self, client):
         self.client = client
 
@@ -129,4 +129,4 @@ class reddit(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'Something unexpected happened...\n\n {error}'))
 
 def setup(client):
-    client.add_cog(reddit(client))
+    client.add_cog(Web(client))

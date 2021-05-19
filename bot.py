@@ -37,7 +37,7 @@ def get_prefix(client, message):
 
 client = commands.AutoShardedBot(command_prefix=get_prefix, help_command=None, intents=discord.Intents.all(),
                                  case_insensitive=True, allowed_mentions=discord.AllowedMentions.none())
-slash = SlashCommand(client, sync_commands=True, sync_on_cog_reload=True)
+slash = SlashCommand(client, sync_commands = False, sync_on_cog_reload=False)
 logging.basicConfig(level = logging.INFO)
 client.logger = logging.getLogger('discord')
 

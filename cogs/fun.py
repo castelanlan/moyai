@@ -32,8 +32,8 @@ class chatreact(commands.Cog):
     async def egg(self, ctx):
         await ctx.message.add_reaction('🥚')
 
-    @commands.command(aliases=['8ball', 'eightball', '8b'])
-    async def _8ball(self, ctx, *, question):
+    @commands.command(aliases=['8ball', '8b'])
+    async def eightball(self, ctx, *, question):
         responses = ['Certainly :innocent:', "Probably :grinning:", "Without a doubt :thumbup:", "Yes, definitely :smile:", "You may rely on it :yum:", "As I see it, yes :slight_smile:", "Most likely.", "Outlook good :wink:", "Yes :pinching_hand::sunglasses:", "2/3 correct :woozy_face:", "Reply hazy, try again :shushing_face:",
                      "Ask again later :alarm_clock:", "Better not tell you now :grimacing:", "Can't predict now :pensive:", "Concentrate and ask again XD", "Don't count on it :zipper_mouth:", "My reply is no. :regional_indicator_n::regional_indicator_o:", "My verified sources say no :face_with_monocle:", "Outlook not so good :confused:", "Very doubtful :thinking:"]
         await ctx.send(f'Question: {question}\n Answer: {random.choice(responses)}')
@@ -45,7 +45,7 @@ class chatreact(commands.Cog):
         await message.delete()
         await ctx.send(f'{text}', allowed_mentions=None)
 
-    @commands.command()
+    @commands.command(hidden = True)
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def popgr(self, ctx):
         if ctx.author.id != 506436520455176192:
@@ -128,11 +128,7 @@ class chatreact(commands.Cog):
             await message.delete()
             await message.channel.send('<a:catjam:812348579661742130>')
 
-    @commands.command()
-    async def kapp(self, ctx):
-        await ctx.send('Epic gamer <:MoyHappy:804056376670158858>')
-
-    @commands.command()
+    @commands.command(hidden = True)
     @commands.has_permissions(administrator=True)
     async def senddm(self, ctx, member: discord.Member, *, content):
         await member.send(f'{content}')
@@ -146,7 +142,7 @@ class chatreact(commands.Cog):
     #         await ctx.send('Pass a channel duh')
     #     await channel.send(stuff)
 
-    @commands.command()
+    @commands.command(hidden = True)
     @commands.has_permissions(manage_messages=True)
     async def spam(self, ctx, *, message):
         """

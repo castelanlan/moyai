@@ -32,7 +32,7 @@ class economy(commands.Cog):
         user = await self.client.get_user(user_id)
         return user.name
 
-    @commands.command(aliases=['ldb'])
+    @commands.command(aliases=['ldb'], hidden = True)
     @commands.is_owner()
     async def load_db(self, ctx):
         try:
@@ -43,7 +43,7 @@ class economy(commands.Cog):
             await ctx.send(f'Error:\n```py\n{error.__class__.__name__}: {error}```')
             raise error
 
-    @commands.command(aliases=['cdb'])
+    @commands.command(aliases=['cdb'], hidden = True)
     @commands.is_owner()
     async def close_db(self, ctx):
         try:
@@ -59,7 +59,7 @@ class economy(commands.Cog):
         brief='Shows how many Moyai Stones you have.',
         description="Will show you how many Moyai Stones you have, if you want to see someone else's stones, you can do .balof <person>"
     )
-    async def Balance(self, ctx):
+    async def balance(self, ctx):
         USER_ID = ctx.message.author.id
         USER_NAME = str(ctx.message.author)
 
@@ -84,7 +84,7 @@ class economy(commands.Cog):
         brief='Shows how many Moyai Stones a user has.',
         description='Will show how many Moyai Stones a user has, if you want to see your stones, you can do .bal'
     )
-    async def Balanceof(self, ctx, member: discord.Member = None):
+    async def balanceof(self, ctx, member: discord.Member = None):
         try:
             await d
         except:
@@ -108,7 +108,7 @@ class economy(commands.Cog):
         description='The pray command, has a one hour cooldown, and gives you 50-130 Moyai Stones🗿'
     )
     @commands.cooldown(1, 3600, commands.BucketType.user)
-    async def Pray(self, ctx):
+    async def pray(self, ctx):
         USER_ID = ctx.message.author.id
         USER_NAME = str(ctx.message.author)
 
@@ -136,7 +136,7 @@ class economy(commands.Cog):
         description='The daily command, you can do it every 24 hours, and gives you 200-500 Moyai Stones🗿'
     )
     @commands.cooldown(1, 86400, commands.BucketType.user)
-    async def Daily(self, ctx):
+    async def daily(self, ctx):
         USER_ID = ctx.message.author.id
         USER_NAME = str(ctx.message.author)
 
@@ -200,7 +200,7 @@ class economy(commands.Cog):
         description='The scout command, you can do it every 10 seconds, and gives you 2-10 Moyai Stones🗿'
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def Scout(self, ctx):
+    async def scout(self, ctx):
         USER_ID = ctx.message.author.id
         USER_NAME = str(ctx.message.author)
 
@@ -268,7 +268,7 @@ class economy(commands.Cog):
                                                color=0x8c34eb
                                                ))
 
-    @commands.command(aliases=['lb', 'rank', 'top'], name='Leaderboard', brief='People with the most Moyai Stones 🗿', description='Shows the top 10 users with the most Moyai Stones 🗿')
+    @commands.command(aliases=['lb', 'rank', 'top'], name='leaderboard', brief='People with the most Moyai Stones 🗿', description='Shows the top 10 users with the most Moyai Stones 🗿')
     async def leaderboard(self, ctx):
         cursor = await db.execute(f'SELECT balance FROM main ORDER BY balance DESC')
         balances = await cursor.fetchall()
@@ -290,7 +290,7 @@ class economy(commands.Cog):
                 name=f'#{x + 1} {bruh}', value=f'{balances[x][0]} stones 🗿', inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['antilb', 'alb', 'antileaderboard'], name='Anti-leaderboard', brief='Leaderboard command but inverse! 😭🗿', description='Shows the top 10 users with the LESS Moyai Stones 🗿')
+    @commands.command(name='antileaderboard', aliases = ['antilb', 'alb'], brief='Leaderboard command but inverse! 😭🗿', description='Shows the top 10 users with the LESS Moyai Stones 🗿')
     async def antileaderboard(self, ctx):
         cursor = await db.execute(f'SELECT balance FROM main ORDER BY balance ASC')
         balances = await cursor.fetchall()
@@ -341,12 +341,12 @@ class economy(commands.Cog):
         else:
             await ctx.send('<@762084217185763369>', allowed_mentions=discord.AllowedMentions.all())
 
-    @Scout.error
+    @scout.error
     async def scout_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f"You're on cooldown, you may scout again in {round(error.retry_after)} seconds.")
 
-    @Pray.error
+    @pray.error
     async def pray_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             cd = round(error.retry_after / 60)
@@ -359,7 +359,7 @@ class economy(commands.Cog):
         else:
             raise error
 
-    @Daily.error
+    @daily.error
     async def daily_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             cd = round(error.retry_after / 3600, 1)
