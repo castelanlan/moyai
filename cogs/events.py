@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 from discord.ext import commands, tasks
 from bot import get_prefix
+from .economy import load_db
 import json
 
 class events(commands.Cog):
@@ -228,7 +229,7 @@ class events(commands.Cog):
         """
         channel = self.client.get_channel(804074100678066245)
         # Bot get guild(server) roles
-        r = discord.utils.get(member.guild.roles, name='🗿')
+        r = discord.utils.get(member.guild.roles, name='🗿 Epic')
         embed = discord.Embed(
             title='**A new member just arrived!** :sunglasses:',
             description=f"{member.mention} joined, now we're at {member.guild.member_count} gamers :sunglasses:",
@@ -257,18 +258,31 @@ class events(commands.Cog):
         """
         if isinstance(error, commands.MissingRequiredArgument):
             bruh = str(error.param).split(':')
-            await ctx.send(embed=discord.Embed(description=f'Please pass in all arguments. Missing argument: {bruh[0]}', color=0x2F3136))
+            await ctx.send(embed=discord.Embed(description=f'Please pass in all arguments. Missing argument: {bruh[0]}', color=0x2f3136))
             return
+
         elif isinstance(error, commands.CommandNotFound):
             return
+
         elif isinstance(error, commands.BadArgument):
             await ctx.send(f'You or oxi did something wrong... ||(probably oxi tbh)||\n```py\n{error}\n```')
+
         elif isinstance(error, commands.CommandOnCooldown):
-            print(f'Cooldown - {error.retry_after}')
+            self.client.logger.error(f'Cooldown - {error.retry_after}')
             return
+
         elif isinstance(error, commands.NotOwner):
             await ctx.send('Yo wtf u tryna do :moyai:', delete_after = 7)
             return
+        
+        elif str(error) == 'Command raised an exception: ValueError: no active connection':
+            await ctx.send('aaa uhhhhh cum')
+            try:
+                await load_db(ctx)
+            except Exception as error:
+                self.client.logger.error(f'{error.__class__.__name__}: {error}')
+            return
+
         else:
             self.client.logger.error(f'{error.__class__.__name__}: {error}')
             return

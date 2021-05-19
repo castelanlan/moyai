@@ -7,6 +7,14 @@ from discord.ext import commands
 db = aiosqlite.connect('economy.sql')
 cursor = db.cursor()
 
+async def load_db(ctx):
+    try:
+        await db
+        await cursor
+        await ctx.send('Connected to database')
+    except Exception as error:
+        await ctx.send(f'Error:\n```py\n{error.__class__.__name__}: {error}```')
+        raise error
 
 class economy(commands.Cog):
     def __init__(self, client):
@@ -32,8 +40,6 @@ class economy(commands.Cog):
         user = await self.client.get_user(user_id)
         return user.name
 
-    @commands.command(aliases=['ldb'], hidden = True)
-    @commands.is_owner()
     async def load_db(self, ctx):
         try:
             await db
@@ -42,6 +48,11 @@ class economy(commands.Cog):
         except Exception as error:
             await ctx.send(f'Error:\n```py\n{error.__class__.__name__}: {error}```')
             raise error
+
+    @commands.command(aliases=['ldb'], hidden = True)
+    @commands.is_owner()
+    async def _ldb(self, ctx):
+        await load_db(ctx)
 
     @commands.command(aliases=['cdb'], hidden = True)
     @commands.is_owner()
