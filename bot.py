@@ -45,18 +45,24 @@ client.logger = logging.getLogger('discord')
 @client.command(aliases=['prefix'])
 async def userprefix(ctx, prefix):
     if prefix == '':
+
         await ctx.send('You can\'t set your prefix to nothing young man :sunglasses:')
         return
+
     else:
+
         with open('user_prefixes.json', 'r') as f:
             prefixes = json.load(f)
 
         prefixes[str(ctx.author.id)] = f'{prefix} ', prefix
 
         try:
+
             with open('user_prefixes.json', 'w') as f:
                 json.dump(prefixes, f, indent=4)
+
             await ctx.send(f'User prefix succesfully changed to `{prefix}`')
+            
         except:
             await ctx.send("You can't change your prefix to that.")
 
@@ -70,19 +76,30 @@ async def load(ctx, extension='all'):
     """
     await ctx.trigger_typing()
     if extension == 'all':
+
         msg = await ctx.send('Loading all extensions...')
         try:
+
             for filename in os.listdir('./cogs'):
+
                 if filename.endswith('.py'):
+
                     client.load_extension(f'cogs.{filename[:-3]}')
+
             await msg.edit(content='All extensions loaded successfully.')
+
         except commands.ExtensionError as e:
+
             await msg.edit(content=f'An error happened...\n```py\n{e.__class__.__name__}: {e}\n```')
+
     else:
+
         msg = await ctx.send(f'Loading {extension}...')
         try:
+
             client.load_extension(f'cogs.{extension}')
             await msg.edit(content=f'{extension} loaded successfully.')
+
         except commands.ExtensionError as e:
             await msg.edit(content=f'An error happened...\n```py\n{e.__class__.__name__}: {e}\n```')
 
@@ -96,19 +113,30 @@ async def unload(ctx, extension='all'):
     """
     await ctx.trigger_typing()
     if extension == 'all':
+
         msg = await ctx.send('Unloading all extensions...')
         try:
+
             for filename in os.listdir('./cogs'):
+
                 if filename.endswith('.py'):
+
                     client.unload_extension(f'cogs.{filename[:-3]}')
+
             await msg.edit(content='All extensions unloaded succesfully.')
+
         except commands.ExtensionError as e:
+
             await msg.edit(content=f'An error happened...\n```py\n{e.__class__.__name__}: {e}\n```')
+
     else:
+
         msg = await ctx.send(f'Unloading {extension}...')
         try:
+
             client.unload_extension(f'cogs.{extension}')
             await msg.edit(content=f'{extension} unloaded successfully.')
+
         except commands.ExtensionError as e:
             await msg.edit(content=f'An error happened...\n```py\n{e.__class__.__name__}: {e}\n```')
 
@@ -121,20 +149,33 @@ async def _reload(ctx, extension='all'):
         specific cog/extension
     """
     if extension == 'all':
+
         msg = await ctx.send('Reloading all extensions...')
+
         try:
+
             await ctx.trigger_typing()
+
             for filename_cogs in os.listdir('./cogs'):
+
                 if filename_cogs.endswith('.py'):
+
                     client.reload_extension(f'cogs.{filename_cogs[:-3]}')
+
             await msg.edit(content='All extensions reloaded successfully.')
+
         except commands.ExtensionError as e:
+
             await msg.edit(content=f'An error happened...\n```py\n{e.__class__.__name__}: {e}\n```')
+
     else:
+
         msg = await ctx.send(f'Reloading {extension}...')
         try:
+
             client.reload_extension(f'cogs.{extension}')
             await msg.edit(content=f'Cog "{extension}" reloaded successfully.')
+
         except commands.ExtensionError as e:
             await msg.edit(content=f'An error happened...```py\n{e.__class__.__name__}: {e}\n```')
 

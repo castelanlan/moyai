@@ -48,11 +48,8 @@ class economy(commands.Cog):
     async def close_db(self, ctx):
         try:
             cursor.close()
-            db.close()
-            print(db)
-            print(cursor)
+            await db.close()
             await ctx.send('Closed database')
-            print('Closed database')
         except Exception as error:
             await ctx.send(f'Error:\n```py\n{error.__class__.__name__}: {error}```')
             raise error
@@ -166,13 +163,22 @@ class economy(commands.Cog):
         cursor = await db.execute(f'SELECT balance FROM main where user_id = {ctx.author.id}')
         user_money = await cursor.fetchone()
 
-        if user_money is None:
-            await ctx.send("You can't do this command! You haven't started your journey!")
-        
         if amount == 'all':
             amount = int(user_money[0]) - 1
         else:
             amount = int(amount)
+
+        if user_money is None:
+            await ctx.send("You can't do this command! You haven't started your journey!")
+            return
+
+        if amount < 0:
+            await ctx.send('no', delete_after = 7)
+            return
+
+        elif amount == 0:
+            await ctx.send('Hmmm how about no. You would\'ve lost anyways...', delete_after = 7)
+            return 
 
         if amount >= int(user_money[0]):
             await ctx.send(embed=discord.Embed(description='You don\'t have all that money <:MoyPensive:806407627721932810>', color=0x2F3136))
@@ -268,7 +274,6 @@ class economy(commands.Cog):
         balances = await cursor.fetchall()
         cursor = await db.execute(f'SELECT user_id FROM main ORDER BY balance DESC')
         names = await cursor.fetchall()
-        print(names)
         embed = discord.Embed(
             title='Moyai Leaderboard 🗿🙏',
             description='\n',
@@ -305,6 +310,14 @@ class economy(commands.Cog):
             embed.add_field(
                 name=f'#{x + 1} {bruh}', value=f'{balances[x][0]} stones 🗿', inline=False)
         await ctx.send(embed=embed)
+
+    @commands.command(hidden = True)
+    @commands.is_owner()
+    async def setprays(self, ctx, user : discord.Member, amount : int) -> None:
+        await db.execute(f'UPDATE main SET balance = ? WHERE user_id = ?', (amount, user.id))
+        await db.commit()
+        await ctx.send('Succesfull I guess')
+
 
     @commands.command(aliases=['agive'], hidden=True)
     @commands.is_owner()

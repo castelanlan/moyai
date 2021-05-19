@@ -47,7 +47,7 @@ class boosters(commands.Cog):
 #                                                           tbjosh
 #                                                           tbjosh
 
-    @commands.command()
+    @commands.command(hidden = True)
     async def josh(self, ctx, *, c: commands.clean_content = ''):
         await ctx.send(f'<@290191358516527104>, {c}', allowed_mentions=discord.AllowedMentions(users=True))
         await asyncio.sleep(0.5)
@@ -59,7 +59,7 @@ class boosters(commands.Cog):
         await asyncio.sleep(0.5)
         await ctx.send(f'<@290191358516527104>, {c}', allowed_mentions=discord.AllowedMentions(users=True))
 
-    @commands.command()
+    @commands.command(hidden = True)
     async def cimm(self, ctx):
         await ctx.message.delete()
         if ctx.author.id != 608727414725410816:
@@ -70,7 +70,7 @@ class boosters(commands.Cog):
             embed.set_thumbnail(url=f'{ctx.author.avatar_url}')
             await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(hidden = True)
     async def crispy(self, ctx):
         await ctx.send('_crispy you horny motherfucker_')
 

@@ -83,7 +83,7 @@ class mod(commands.Cog):
         except Exception as error:
             await ctx.send(embed=discord.Embed(description=f'This command failed.\n\n{error}', color=0x2F3136), delete_after=10)
 
-    @commands.command()
+    @commands.command(hidden = True)
     async def apply(self, ctx, *, message='No text provided'):
         # channel = self.client.get_channel(818617863677411389)
         await ctx.message.delete()

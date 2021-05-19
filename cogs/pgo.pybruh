@@ -54,7 +54,7 @@ class pgo(commands.Cog, command_attrs=dict(hidden=True)):
         if str(payload.emoji) == '🗿':
             ...
 
-    @commands.command(aliases=['cr'])
+    @commands.command(aliases=['cr'], hidden = True)
     @commands.is_owner()
     async def create_raid_channel(self, ctx, pokemon, *, desc=None):
         available_raids_channel = discord.utils.get(
@@ -63,7 +63,7 @@ class pgo(commands.Cog, command_attrs=dict(hidden=True)):
         await ctx.channel.category.create_text_channel(f'{pokemon}-raid-by-{ctx.author.name}', reason=f'RAID SYSTEM - {ctx.author} made a {pokemon} raid.')
         await raid_message.add_reaction('🗿')
 
-    @commands.command(aliases=['dlt'])
+    @commands.command(aliases=['dlt'], hidden = True)
     @commands.is_owner()
     async def delete_raid_channel(self, ctx):
         await self.delete_channel(ctx)

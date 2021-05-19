@@ -93,36 +93,36 @@ class admin(commands.Cog):
     async def _eval(self, ctx, *, cmd):
         await self.cu(ctx, cmd)
 
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, hidden = True)
     @commands.is_owner()
     async def status(self, ctx):
         await ctx.send('I have to set my status to something dum dum :rage:')
 
-    @status.command()
+    @status.command(hidden = True)
     @commands.is_owner()
     async def idle(self, ctx):
         await self.client.change_presence(status=discord.Status.Idle, activity=self.game)
         await ctx.send("Changed status to idle", delete_after=5)
 
-    @status.command()
+    @status.command(hidden = True)
     @commands.is_owner()
     async def dnd(self, ctx):
         await self.client.change_presence(status=discord.Status.dnd, activity=self.game)
         await ctx.send("Changed status to do not disturb", delete_after=5)
 
-    @status.command()
+    @status.command(hidden = True)
     @commands.is_owner()
     async def online(self, ctx):
         await self.client.change_presence(status=discord.Status.online, activity=self.game)
         await ctx.send("Changed status to online", delete_after=5)
 
-    @status.command()
+    @status.command(hidden = True)
     @commands.is_owner()
     async def offline(self, ctx):
         await self.client.change_presence(status=discord.Status.invisible)
         await ctx.send("Changed status to invisible", delete_after=5)
 
-    @commands.command()
+    @commands.command(hidden = True)
     @commands.is_owner()
     async def close(self, ctx):
         await ctx.send('Are you sure :moyai:')

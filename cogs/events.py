@@ -11,13 +11,13 @@ class events(commands.Cog):
         self.client = client
     #    self.dbl_stuff.start()
 
-    @commands.command(aliases = ['stop'])
+    @commands.command(aliases = ['stop'], hidden = True)
     async def cancel_loop(self, ctx):
         self.dbl_stuff.stop()
         await ctx.send('uhhh stopping the loop i guess')
         self.client.logger.info('Stopping loop')
 
-    @commands.command(aliases = ['start'])
+    @commands.command(aliases = ['start'], hidden = True)
     async def start_loop(self, ctx):
         await self.dbl_stuff.start()
         self.client.logger.info('Starting loop')
@@ -105,8 +105,8 @@ class events(commands.Cog):
                 await message.channel.send('indeed, pog <:MoyPog:802214897710530560>')
             elif message.content.startswith('!boostinfo'):
                 await message.channel.send('<@582328739313221654> was the first ***epic*** booster, check his profile to see his socials :sunglasses:')
-            elif self.client.user in message.mentions:
-                await message.channel.send(f'Your prefix for me is `{get_prefix(self.client, message)}`, and stop pinging me :rage:')
+            elif self.client.user.id in message.raw_mentions:
+                await message.channel.send(f'Your prefix for me is `{get_prefix(self.client, message)[0]}`, and stop pinging me :rage:')
             elif message.content.startswith('reaction bomb'):
                 await message.add_reaction('<:MoyWoke:802228902411894804>')
                 await asyncio.sleep(0.3)
