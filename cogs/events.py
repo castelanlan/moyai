@@ -291,7 +291,6 @@ class events(commands.Cog):
     async def on_command_completion(self, ctx):
         if ctx.prefix == None:
             return
-        # print(f'{ctx.prefix}{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
         self.client.logger.info(
             f'{ctx.prefix}{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
 
