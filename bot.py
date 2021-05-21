@@ -41,6 +41,12 @@ slash = SlashCommand(client, sync_commands = False, sync_on_cog_reload=False)
 logging.basicConfig(level = logging.INFO)
 client.logger = logging.getLogger('discord')
 
+@client.event
+async def on_message(message):
+    if message.guild is None:
+        return
+    else:
+        await client.process_commands(message)
 
 @client.command(aliases=['prefix'])
 async def userprefix(ctx, prefix):

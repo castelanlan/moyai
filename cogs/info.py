@@ -18,38 +18,45 @@ class Info(commands.Cog):
         if dsc is None:
             dsc = "This server doesn't have a description"
         embed = discord.Embed(
-            title=f"{ctx.guild.name}", description=f'{dsc}', color=discord.Color(0xff33ff))
+            title=ctx.guild.name, description=dsc, color=0xff33ff)
         embed.add_field(name="Server created at",
-                        value=f"{ctx.guild.created_at}", inline=False)
+                        value=ctx.guild.created_at, inline=False)
         embed.add_field(name="Server Owner",
-                        value=f"{ctx.guild.owner}", inline=False)
+                        value=ctx.guild.owner, inline=False)
         embed.add_field(name="Server Region",
-                        value=f"{ctx.guild.region}", inline=False)
+                        value=ctx.guild.region, inline=False)
         embed.add_field(name="Server ID",
-                        value=f"{ctx.guild.id}", inline=False)
-        embed.set_thumbnail(url=f"{ctx.guild.icon_url}")
+                        value=ctx.guild.id, inline=False)
+        embed.set_thumbnail(url=ctx.guild.icon_url)
         await ctx.send(embed=embed)
-        print('info')
+        
+    def parse_time(self, time : str) -> str:
+        return str(time).split('.')[0]
 
     @commands.command()
     async def user(self, ctx, member: discord.Member = None):
+
         if member is None:
             member = ctx.author
+
+        joined_at = self.parse_time(member.joined_at)
+        created_at = self.parse_time(member.created_at)
+
+        roles = []
+        for r in member.roles:
+            roles.append(r.mention)
+        roles.reverse()
+
         embed = discord.Embed(
             title=f'{member}', description=f'This the info for {member.name}', color=0x2b2be5)
-        embed.add_field(name='Joined this server at:',
-                        value=f'{member.joined_at}', inline=False)
-        embed.add_field(name='Nick:', value=f'{member.nick}', inline=True)
-        embed.add_field(name='Status:', value=f'{member.status}')
-        embed.add_field(name='Top role:',
-                        value=f'{member.top_role}', inline=True)
-        embed.add_field(name='Activity:', value=f'{member.activity}')
-        embed.add_field(name='User ID:', value=member.id)
-        embed.set_image(url=member.avatar_url)
+
+        embed.add_field(name = 'Roles:', value = ' '.join(roles), inline = False)
+        embed.add_field(name = 'Joined at:', value = joined_at, inline = False)
+        embed.add_field(name = 'Accout created at:', value = created_at, inline = False)
+
         embed.set_footer(text='Bot created specifically for the Moyai Cult server😎',
-                         icon_url=f'{self.client.get_guild(802202917737463829).icon_url}')
+                         icon_url=f'{ctx.guild.icon_url}')
         await ctx.send(f'{member.id}', embed=embed)
-        print('user')
 
     @commands.command(hidden=True)
     @commands.is_owner()
@@ -65,7 +72,6 @@ class Info(commands.Cog):
         embed.add_field(name=':six:', value="If you break these guidelines you'll be asked to stop, and if you become too much of a pain, you'll be kicked or banned depending on staff patience. <:MoySpy:802215953222991962> \n ‎‎‎‎‎‎‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ")
         embed.set_footer(text='Made exclusively for the Moyai Cult server. 😎')
         await ctx.send(embed=embed)
-        print('rules')
 
     # @commands.command()
     # async def help(self, ctx):

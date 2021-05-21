@@ -58,7 +58,6 @@ class economy(commands.Cog):
     @commands.is_owner()
     async def close_db(self, ctx):
         try:
-            cursor.close()
             await db.close()
             await ctx.send('Closed database')
         except Exception as error:

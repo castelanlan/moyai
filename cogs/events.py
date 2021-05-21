@@ -38,7 +38,7 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_connect(self):
-        print(f'Bot connected - {datetime.utcnow()}')
+        self.client.logger.info(f'Bot connected - {datetime.utcnow()}')
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -47,7 +47,7 @@ class events(commands.Cog):
             live / the last time I ran this 
             script.
         """
-        print(f'Bot ready - {datetime.utcnow()}')
+        self.client.logger.info(f'Bot ready - {datetime.utcnow()}')
 
     @commands.Cog.listener()
     async def on_disconnect(self):
@@ -279,6 +279,7 @@ class events(commands.Cog):
             await ctx.send('aaa uhhhhh cum')
             try:
                 await load_db(ctx)
+                await process_commands(ctx.message)
             except Exception as error:
                 self.client.logger.error(f'{error.__class__.__name__}: {error}')
             return

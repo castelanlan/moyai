@@ -86,11 +86,13 @@ class Web(commands.Cog):
     @commands.command()
     async def ip(self, ctx, number):
         await ctx.trigger_typing()
-        async with aiohttp.ClientSession as cs:
+        async with aiohttp.ClientSession() as cs:
             async with cs.get(f'https://api.ipgeolocation.io/ipgeo?apiKey=905ce85034b94477b63f6a345f6bc04f&ip={number}') as r:
                 try:
                     res = await r.json()
+                    b = discord.Embed(description = f'Showing info for ip `{number}`', color = 0xb00b1e)
                     print(res)
+
                 except Exception as e:
                     await ctx.send(f'```py\n{e.__class__.__name__}: {e}```')
 
