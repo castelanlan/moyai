@@ -1,9 +1,9 @@
 import ast
 import discord
 import inspect
-from io import BytesIO
 from inspect import getsource
 from discord.ext import commands
+
 
 
 class admin(commands.Cog):
