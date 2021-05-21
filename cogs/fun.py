@@ -133,7 +133,7 @@ class chatreact(commands.Cog):
     async def senddm(self, ctx, member: discord.Member, *, content):
         await member.send(f'{content}')
         await ctx.message.delete()
-        print(f'"{content}" has been sent to {member}')
+        self.client.logger.info(f'"{content}" has been sent to {member}')
 
     # @commands.command()
     # @commands.has_permissions(administrator = True)

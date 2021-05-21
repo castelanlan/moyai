@@ -316,7 +316,6 @@ class economy(commands.Cog):
                 bruh = ctx.guild.get_member(names[x][0]).display_name
             except:
                 bruh = '`This user left 😔`'
-            print(bruh)
             embed.add_field(
                 name=f'#{x + 1} {bruh}', value=f'{balances[x][0]} stones 🗿', inline=False)
         await ctx.send(embed=embed)

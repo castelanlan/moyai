@@ -28,8 +28,6 @@ class events(commands.Cog):
         with open('buffer.json', 'r') as f:
             res = json.load(f)
             old_time = res['time']
-            print(res)
-            print(old_time)
         ...
 
     @dbl_stuff.before_loop
@@ -51,7 +49,7 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_disconnect(self):
-        print(f'Bot disconnected - {datetime.utcnow()}')
+        self.client.logger.warning(f'Bot disconnected - {datetime.utcnow()}')
 
     @commands.Cog.listener()
     async def on_message(self, message):

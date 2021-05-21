@@ -52,7 +52,7 @@ class ne(commands.Cog):
             cursor.close()
             db.close()
             await ctx.send('Closed database')
-            print('Closed database')
+            self.client.logger.warning('Closed database')
         except Exception as error:
             await errored(ctx, e)
 
@@ -124,7 +124,7 @@ class ne(commands.Cog):
     #         asyncio.run(self.load_db())
     #         return True
     #     except Exception as error:
-    #         print(error)
+    #         raise error
     #         return False
     #     # return commands.check(predicate)
 

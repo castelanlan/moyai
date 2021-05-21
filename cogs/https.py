@@ -35,11 +35,11 @@ class Web(commands.Cog):
                     await msg.add_reaction('🔼')
                     await msg.add_reaction('↕️')
                     await msg.add_reaction('🔽')
-                    print(f'reddit {subreddit}')
+                    self.client.logger.info(f'reddit {subreddit}')
                 except Exception as e:
                     await ctx.send(embed = discord.Embed(description = 'Something went wrong, check if the subreddit name is correct!', color = 0x2F3136))
-                    print(f'reddit {subreddit} FAILED')
-                    print(e)
+                    self.client.logger.info(f'reddit {subreddit} FAILED')
+                    self.client.logger.info(e)
 
     @commands.command(name = 'randomperson', aliases = ['rp', 'randomp', 'rperson'])
     async def random_person(self, ctx):
@@ -48,7 +48,7 @@ class Web(commands.Cog):
                 try:
                     res = await r.read()
                     ablabl = json.loads(res)
-                    #print(ablabl)
+                    #self.client.logger.info(ablabl)
                     first_name = ablabl[0]['first']
                     last_name = ablabl[0]['last']
                     email = ablabl[0]['email']
@@ -91,7 +91,7 @@ class Web(commands.Cog):
                 try:
                     res = await r.json()
                     b = discord.Embed(description = f'Showing info for ip `{number}`', color = 0xb00b1e)
-                    print(res)
+                    self.client.logger.info(res)
 
                 except Exception as e:
                     await ctx.send(f'```py\n{e.__class__.__name__}: {e}```')
@@ -102,10 +102,10 @@ class Web(commands.Cog):
         async with aiohttp.ClientSession as cs:
             async with cs.get('https://oasis.sh/api/users') as r:
                 await ctx.send(f'Status: \n```py\n{r.status}```')
-                print(r)
+                self.client.logger.info(r)
                 try:
                     res = await r.json()
-                    print(res)
+                    self.client.logger.info(res)
                 except Exception as e:
                     await ctx.send(f'```py\n{e.__class__.__name__}: {e}```')
 
@@ -126,7 +126,7 @@ class Web(commands.Cog):
     async def sub_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(embed = discord.Embed(description = f'You\'re on cooldown! Try again in {round(error.retry_after, 2)} seconds.', color = 0x2F3136))
-            print('cooldown')
+            self.client.logger.info('cooldown')
         else:
             await ctx.send(embed = discord.Embed(description = f'Something unexpected happened...\n\n {error}'))
 

@@ -12,7 +12,7 @@ def respond():
                 old_file = json.load(file)
                 old_time = old_file['time'] 
             except Exception as e:
-                print(e)
+                raise e
                 old_time = 0
 
             new_json = request.json
