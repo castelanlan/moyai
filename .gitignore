@@ -1,5 +1,10 @@
-private
-buffer
-.vscode/
 __pycache__
+
+.vscode
+
 cogs/__pycache__
+cogs/core/__pycache__
+
+__*.py
+private.py
+webserv.py
