@@ -138,6 +138,7 @@ class extra(commands.Cog):
             if count != 1 and count % 5 == 1:
                 embed_list.append(page_embed)
                 page_embed = base_embed.copy()
+            
             link = base_url + x
 
             try:            

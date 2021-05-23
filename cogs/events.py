@@ -277,7 +277,7 @@ class events(commands.Cog):
             await ctx.send('aaa uhhhhh cum')
             try:
                 await load_db(ctx)
-                await process_commands(ctx.message)
+                await self.client.process_commands(ctx.message)
             except Exception as error:
                 self.client.logger.error(f'{error.__class__.__name__}: {error}')
             return

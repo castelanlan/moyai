@@ -1,18 +1,21 @@
 import ast
 import discord
 import inspect
+import time
+from dis import dis
 from inspect import getsource
 from discord.ext import commands
+from pygicord import Paginator
 
 
-
-class admin(commands.Cog):
+class Admin(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.game = discord.Activity(
             type=discord.ActivityType.watching, name="my cute lil moyai's")
 
-    def insert_returns(self, body):
+
+    async def insert_returns(self, body):
         """ 
             insert return statement if
             the last expression is an 
@@ -36,6 +39,40 @@ class admin(commands.Cog):
         if isinstance(body[-1], ast.With):
             self.insert_returns(body[-1].body)
 
+    async def get_pages(self, inputt, result : str, time) -> list or str:
+        pages = []
+        NUMERO = 1200
+        l = len(str(result))
+        base = discord.Embed(description = f'Ran in {round(time, 2)} seconds', color = 0x000000).add_field(name = 'Input', value = f'```py\n{inputt}\n```', inline = False)
+
+        try:
+            if l > NUMERO:
+
+                res = []
+
+                for i in range(0, l, NUMERO):
+                    res.append(result[i : i + NUMERO])
+
+                x = 0
+                for i in range(len(res)):
+
+                    if x != 0:
+                        page_embed = base.copy()
+                        page_embed.add_field(name = 'Return', value = f'```py\n{res[i]}\n```', inline = False)
+                        print(f'bruh: {len(page_embed._fields)}')
+                        pages.append(page_embed)
+                        del page_embed
+
+                    x += 1
+
+                print(f'A: {len(pages)}')    
+                return pages
+
+            else:
+                return [(base.add_field(name = 'Return', value = f'```py\n{result}\n```', inline = False))]
+        except Exception as e:
+            raise e
+
     async def cu(self, ctx, cmd):
         """
             Eval command, really good
@@ -43,6 +80,7 @@ class admin(commands.Cog):
             You got to be really careful tho.
         """
         await ctx.trigger_typing()
+        before = time.time()
 
         try:
             cmd_1 = cmd
@@ -52,11 +90,13 @@ class admin(commands.Cog):
             body = f"async def {fn_name}():\n{cmd}"
             parsed = ast.parse(body)
             body = parsed.body[0].body
-            self.insert_returns(body)
+            await self.insert_returns(body)
 
             env = {
                 'cmd': cmd,
+                'dis': dis,
                 'ctx': ctx,
+                'sex': 'sex',
                 'body': body,
                 'src': getsource,
                 'discord': discord,
@@ -69,26 +109,26 @@ class admin(commands.Cog):
 
             result = await eval(f"{fn_name}()", env)
 
-            if len(str(result)) > 1980:
-                file = BytesIO(str(result).encode())
-                await ctx.send(file=discord.File(file, 'result.py'))
-                return
+            # if len(str(result)) > 1980:
+            #     file = BytesIO(str(result).encode())
+            #     await ctx.send(file=discord.File(file, 'result.py'))
+            #     return
 
-            epic_embed = discord.Embed(description = 'a')
-            epic_embed.add_field(name = 'Input:', value = f'```py\n{cmd_1}\n```', inline = False)
-            epic_embed.add_field(name = 'Return value:', value = f'```py\n{result}\n```', inline = False)
-            await ctx.send(embed = epic_embed)
-
-            #await ctx.send(f'```py\n{result}\n```')
+            after = time.time()
+            delta = after - before
+            pages = await self.get_pages(cmd_1, result, delta)
+            pag = Paginator(pages = pages)
+            await pag.start(ctx)
+            print('sucesso')
 
         except Exception as e:
-            if str(e) == '400 Bad Request (error code: 50006): Cannot send an empty message':
-                return
+            # if str(e) == '400 Bad Request (error code: 50006): Cannot send an empty message':
+            #     raise e
+            # 
+            # else:
+            await ctx.send(f'\n```py\n{e.__class__.__name__}: {e}\n```')
 
-            else:
-                await ctx.send(f'\n```py\n{e.__class__.__name__}: {e}\n```')
-
-    @commands.command(hidden=True, aliases=['eval', 'e'])
+    @commands.command(hidden=True, name = 'eval', aliases=['e'])
     @commands.is_owner()
     async def _eval(self, ctx, *, cmd):
         await self.cu(ctx, cmd)
@@ -134,4 +174,4 @@ class admin(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(admin(client))
+    client.add_cog(Admin(client))
