@@ -16,26 +16,19 @@ class Admin(commands.Cog):
 
 
     async def insert_returns(self, body):
-        """ 
-            insert return statement if
-            the last expression is an 
-            expression statement
-        """
+
+        # Insert return statement if the last expression is an expression statement
         if isinstance(body[-1], ast.Expr):
             body[-1] = ast.Return(body[-1].value)
             ast.fix_missing_locations(body[-1])
 
-        """
-            Same thing as above, but for if statements,
-            we insert returns into the body and the orelse.
-        """
+        # Same thing as above, but for if statements,
+        # we insert returns into the body and the orelse.
         if isinstance(body[-1], ast.If):
             self.insert_returns(body[-1].body)
             self.insert_returns(body[-1].orelse)
 
-        """
-            Inserting returns if we use `with ...`.
-        """
+        # Inserting returns if we use `with ...`.
         if isinstance(body[-1], ast.With):
             self.insert_returns(body[-1].body)
 
@@ -53,19 +46,22 @@ class Admin(commands.Cog):
                 for i in range(0, l, NUMERO):
                     res.append(result[i : i + NUMERO])
 
-                x = 0
-                for i in range(len(res)):
+                #x = 0
+                print(f'LEN RES: {len(res)}')
+                for i in res:
+                    from pprint import pprint
+                    pprint(i)
+                    #if x != 0:
+                    page_embed = base.copy()
+                    page_embed.add_field(name = 'Return', value = f'```py\n{i}\n```', inline = False)
+                    print(f'embed fields #: {len(page_embed._fields)}')
+                    pages.append(page_embed)
+                    print(f'Pages len: {len(pages)}')   
+                    del page_embed
+                    
+                    #x += 1
 
-                    if x != 0:
-                        page_embed = base.copy()
-                        page_embed.add_field(name = 'Return', value = f'```py\n{res[i]}\n```', inline = False)
-                        print(f'bruh: {len(page_embed._fields)}')
-                        pages.append(page_embed)
-                        del page_embed
-
-                    x += 1
-
-                print(f'A: {len(pages)}')    
+                print(f'Pages len: {len(pages)}')    
                 return pages
 
             else:
@@ -130,7 +126,7 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True, name = 'eval', aliases=['e'])
     @commands.is_owner()
-    async def _eval(self, ctx, *, cmd):
+    async def _eval(self, ctx, *, cmd = 'src(commands.command)'):
         await self.cu(ctx, cmd)
 
     @commands.group(invoke_without_command=True, hidden = True)
@@ -175,3 +171,4 @@ class Admin(commands.Cog):
 
 def setup(client):
     client.add_cog(Admin(client))
+    

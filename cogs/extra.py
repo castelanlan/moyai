@@ -134,13 +134,12 @@ class extra(commands.Cog):
         idx = 0
 
         for x in for_res:
+            link = base_url + x
 
             if count != 1 and count % 5 == 1:
                 embed_list.append(page_embed)
                 page_embed = base_embed.copy()
             
-            link = base_url + x
-
             try:            
                 page_embed.add_field(name=f"""‎‎ """, value=f"[`{x.split('#')[1]}`]({link}) Confidence: **{keys[idx]}**%", inline=False)
                 
