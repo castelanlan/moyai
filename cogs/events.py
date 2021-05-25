@@ -10,29 +10,6 @@ import json
 class events(commands.Cog):
     def __init__(self, client):
         self.client = client
-    #    self.dbl_stuff.start()
-
-    @commands.command(aliases = ['stop'], hidden = True)
-    async def cancel_loop(self, ctx):
-        self.dbl_stuff.stop()
-        await ctx.send('uhhh stopping the loop i guess')
-        self.client.logger.info('Stopping loop')
-
-    @commands.command(aliases = ['start'], hidden = True)
-    async def start_loop(self, ctx):
-        await self.dbl_stuff.start()
-        self.client.logger.info('Starting loop')
-
-    @tasks.loop(seconds = 15)
-    async def dbl_stuff(self):
-        with open('buffer.json', 'r') as f:
-            res = json.load(f)
-            old_time = res['time']
-        ...
-
-    @dbl_stuff.before_loop
-    async def before_dbl_stuff(self):
-        await self.client.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_connect(self):
@@ -59,6 +36,8 @@ class events(commands.Cog):
         try:
             if message.content.startswith('hi '):
                 await message.channel.send('Hello my little pogchamp 😽')
+            elif message.content == '<@!815562681267650589>' or message.content == '<@!815562681267650589> ':
+                await message.channel.send(f'My prefix for you is `{get_prefix(self.client, message)[0]}`, and stop pinging me :rage:')
             elif message.content.startswith('hello '):
                 await message.channel.send('no')
             elif message.content.startswith('Hey bot'):
@@ -102,50 +81,6 @@ class events(commands.Cog):
                 await message.add_reaction('🤝')
             elif message.content.startswith('/pog'):
                 await message.channel.send('indeed, pog <:MoyPog:802214897710530560>')
-            elif message.content.startswith('!boostinfo'):
-                await message.channel.send('<@582328739313221654> was the first ***epic*** booster, check his profile to see his socials :sunglasses:')
-            elif self.client.user.id in message.raw_mentions:
-                await message.channel.send(f'Your prefix for me is `{get_prefix(self.client, message)[0]}`, and stop pinging me :rage:')
-            elif message.content.startswith('reaction bomb'):
-                await message.add_reaction('<:MoyWoke:802228902411894804>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<a:MoyWobbleIntensifies:802208413555228682>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<a:MoyWobble:802208434085822474>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyWide:806400142030274581>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyVibeCheckWoke:802228762694647850>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyVibeCheck:802228738514747452>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyTooCool:802228849756078151>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyThis:807087298218688522>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyThinkGray:804062890356244480>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyThink:804062311299940352>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyStonks:807087297433567283>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoySpy:802215953222991962>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyULTIMATE:807413869395443762>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoySmirk:804392711922647080>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoySleep:802215820230918154>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoySick:802215779377741825>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyShy:807087298784264222>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoyShush:802215749346656286>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<:MoySanta:802215724306792458>')
-                await asyncio.sleep(0.3)
-                await message.add_reaction('<a:MoyRoll:802208448841777152>')
         except Exception as error:
             await message.channel.send(f'{error.__class__.__name__}: {error}')
 

@@ -29,10 +29,11 @@ import sys
 def get_prefix(client, message):
     with open('user_prefixes.json', 'r') as f:
         prefixes = json.load(f)
+        f.close()
     try:
         return prefixes[str(message.author.id)]
     except:
-        return '.'
+        return ['.', '. ', '<@!815562681267650589> ', '<@!815562681267650589>', '<@815562681267650589> ', '<@815562681267650589>']
 
 
 client = commands.AutoShardedBot(command_prefix=get_prefix, help_command=None, intents=discord.Intents.all(),
@@ -49,7 +50,7 @@ async def on_message(message):
         await client.process_commands(message)
 
 @client.command(aliases=['prefix'])
-async def userprefix(ctx, prefix):
+async def userprefix(ctx, *, prefix = ''):
     if prefix == '':
 
         await ctx.send('You can\'t set your prefix to nothing young man :sunglasses:')
@@ -59,13 +60,15 @@ async def userprefix(ctx, prefix):
 
         with open('user_prefixes.json', 'r') as f:
             prefixes = json.load(f)
+            f.close()
 
-        prefixes[str(ctx.author.id)] = f'{prefix} ', prefix
+        prefixes[str(ctx.author.id)] = f'{prefix} ', prefix, '<@!815562681267650589> ', '<@!815562681267650589>', '<@815562681267650589> ', '<@815562681267650589>'
 
         try:
 
             with open('user_prefixes.json', 'w') as f:
                 json.dump(prefixes, f, indent=4)
+                f.close()
 
             await ctx.send(f'User prefix succesfully changed to `{prefix}`')
             

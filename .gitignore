@@ -5,11 +5,6 @@ __pycache__
 cogs/__pycache__
 cogs/core/__pycache__
 
-templates/
-
 __*.py
-buffer.json
 private.py
-todo.py
-user_prefixes.json
 webserv.py
