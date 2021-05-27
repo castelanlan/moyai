@@ -11,7 +11,7 @@ async def load_db(ctx):
     try:
         await db
         await cursor
-        await ctx.send('Connected to database')
+        await ctx.send('Connected to database', delete_after = 7)
     except Exception as error:
         await ctx.send(f'Error:\n```py\n{error.__class__.__name__}: {error}```')
         raise error

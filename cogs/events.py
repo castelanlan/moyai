@@ -209,7 +209,7 @@ class events(commands.Cog):
             return
         
         elif str(error) == 'Command raised an exception: ValueError: no active connection':
-            await ctx.send('aaa uhhhhh cum')
+            await ctx.send('Oxi is dumb and should\'ve loaded the db earlier sorry:moyai:', delete_after = 5)
             try:
                 await load_db(ctx)
                 await self.client.process_commands(ctx.message)
@@ -236,6 +236,6 @@ class events(commands.Cog):
     @commands.Cog.listener()
     async def on_error(self, error):
         self.client.logger.error(f'Uhhhh a mf error: {error}')
-        
+
 def setup(client):
     client.add_cog(events(client))
