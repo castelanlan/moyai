@@ -233,6 +233,9 @@ class events(commands.Cog):
         self.client.logger.info(
             f'{ctx.command} - {ctx.channel.name} / {ctx.channel.id} - {ctx.author} {ctx.author.id}')
 
-
+    @commands.Cog.listener()
+    async def on_error(self, error):
+        self.client.logger.error(f'Uhhhh a mf error: {error}')
+        
 def setup(client):
     client.add_cog(events(client))
