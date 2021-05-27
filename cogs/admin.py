@@ -3,6 +3,7 @@ import ast
 import time
 import inspect
 from inspect import getsource
+from io import BytesIO
 
 from dis import dis
 
@@ -52,16 +53,18 @@ class Admin(commands.Cog):
 
                 #x = 0
                 print(f'LEN RES: {len(res)}')
+                print(res[0])
                 for i in res:
                     #if x != 0:
                     page_embed = base.copy().add_field(name = 'Return', value = f'```py\n{i}\n```', inline = False)
                     pages.append(page_embed)
                     print(f'Pages len: {len(pages)}')
-                    print(f'embed fields #: {len(page_embed._fields)}')
-                    
+                    print(f'Embed fields #: {len(page_embed._fields)}')
+                    del page_embed
                     #x += 1
 
                 print(f'Pages len: {len(pages)}')    
+                print(pages)
                 return pages
 
             else:
@@ -105,17 +108,21 @@ class Admin(commands.Cog):
 
             result = await eval(f"{fn_name}()", env)
 
-            # if len(str(result)) > 1980:
-            #     file = BytesIO(str(result).encode())
-            #     await ctx.send(file=discord.File(file, 'result.py'))
-            #     return
-
             after = time.time()
             delta = after - before
-            pages = await self.get_pages(cmd_1, result, delta)
-            pag = Paginator(pages = pages)
-            await pag.start(ctx)
-            print('sucesso')
+            if len(str(result)) > 1020:
+                file = BytesIO(str(result).encode())
+                await ctx.send(f'Done in {round(delta, 4)} seconds', file=discord.File(file, 'result.py'))
+                return
+
+            else:
+                br = (discord.Embed(description = f'Ran in {round(delta, 2)} seconds', color = 0x000000).add_field(name = 'Input', value = f'```py\n{cmd_1}\n```', inline = False)
+                    .add_field(name = 'Result', value = result))
+                await ctx.send(f'Done in {round(delta, 4)} seconds', embed = br)
+                return
+            #pages = await self.get_pages(cmd_1, result, delta)
+            #pag = Paginator(pages = pages)
+            #await pag.start(ctx)
 
         except Exception as e:
             # if str(e) == '400 Bad Request (error code: 50006): Cannot send an empty message':
