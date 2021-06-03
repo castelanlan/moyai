@@ -22,9 +22,7 @@ class boosters(commands.Cog):
         glitch = self.client.get_user(705970067179044904)
         # olerius = self.client.get_user(518228495235547148)
         #afearns = self.client.get_user(632838862145585153)
-        if 'cum' in message.content.lower() and message.author.id == 632838862145585153:
-            await message.channel.send('Make me wet daddy🥵')
-        elif apple in message.mentions:
+        if apple in message.mentions:
             await message.channel.send('Apple is watching hardcore hentai right now...')
         elif '<@!705970067179044904>' in message.content:
             await message.channel.send('DM him you troglodyte')
