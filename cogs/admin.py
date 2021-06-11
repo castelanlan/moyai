@@ -133,7 +133,7 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True, name = 'eval', aliases=['e'])
     @commands.is_owner()
-    async def _eval(self, ctx, *, cmd = 'src(commands.command)'):
+    async def _eval(self, ctx, *, cmd = 'return \'no\''):
         await self.cu(ctx, cmd)
 
     @commands.Cog.listener()

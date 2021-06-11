@@ -20,8 +20,8 @@ import json
 import random
 import logging
 
-import monke_patch
-from private import token, asc
+import _monke_patch
+from _private import token, asc
 
 import discord
 from discord.ext import commands
