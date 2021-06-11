@@ -117,8 +117,8 @@ class Admin(commands.Cog):
 
             else:
                 br = (discord.Embed(description = f'Ran in {round(delta, 2)} seconds', color = 0x000000).add_field(name = 'Input', value = f'```py\n{cmd_1}\n```', inline = False)
-                    .add_field(name = 'Result', value = result))
-                await ctx.send(f'Done in {round(delta, 4)} seconds', embed = br)
+                    .add_field(name = 'Result', value = f'```py\n{result}\n```'))
+                await ctx.send(embed = br)
                 return
             #pages = await self.get_pages(cmd_1, result, delta)
             #pag = Paginator(pages = pages)

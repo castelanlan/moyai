@@ -15,16 +15,17 @@
 """
 
 import os
+import sys
 import json
-import discord
+import random
 import logging
+
 import monke_patch
+from private import token, asc
 
-from private import token
-
+import discord
 from discord.ext import commands
 from discord_slash import SlashCommand
-import sys
 
 def get_prefix(client, message):
     with open('user_prefixes.json', 'r') as f:
@@ -39,7 +40,7 @@ def get_prefix(client, message):
 client = commands.AutoShardedBot(command_prefix=get_prefix, help_command=None, intents=discord.Intents.all(),
                                  case_insensitive=True, allowed_mentions=discord.AllowedMentions.none())
 slash = SlashCommand(client, sync_commands = False, sync_on_cog_reload=False)
-logging.basicConfig(level = logging.INFO)
+logging.basicConfig(format = '%(name)s::%(asctime)s::%(levelname)s::%(message)s', level = logging.INFO)
 client.logger = logging.getLogger('discord')
 
 @client.event
@@ -188,10 +189,15 @@ async def _reload(ctx, extension='all'):
         except commands.ExtensionError as e:
             await msg.edit(content=f'An error happened...```py\n{e.__class__.__name__}: {e}\n```')
 
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
-        client.logger.info(f'Loaded {filename}')
 
 if __name__ == '__main__':
+    from termcolor import colored
+    import random
+    print(colored(random.choice(asc), 'yellow', 'on_grey', ['blink']), end = '\n\n')
+
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py') and not filename.startswith('_'):
+            client.load_extension(f'cogs.{filename[:-3]}')
+            client.logger.info(f'Loaded {filename}')
+
     client.run(token)

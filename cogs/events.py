@@ -125,10 +125,10 @@ class events(commands.Cog):
 
         if payload.channel_id == 825101719474143293:
             if str(payload.emoji) == '🗿':
-                nsfw_role = guild_member.get_role(817510639068643418)
+                nsfw_role = guild_member.get_role(852661831200931870)
                 await member.add_roles(nsfw_role)
             elif str(payload.emoji) == '😎':
-                pogo_role = guild_member.get_role(816992672954449921)
+                pogo_role = guild_member.get_role(852661951855460372)
                 await member.add_roles(pogo_role)
             elif str(payload.emoji) == '🤖':
                 bott_role = guild_member.get_role(840371852588220416)
@@ -146,12 +146,19 @@ class events(commands.Cog):
         if payload.channel_id == 825101719474143293:
             guild_member = self.client.get_guild(payload.guild_id)
             member = guild_member.get_member(payload.user_id)
-            nsfw_role = guild_member.get_role(817510639068643418)
-            pogo_role = guild_member.get_role(816992672954449921)
+            nsfw_role = guild_member.get_role(852661831200931870)
+            pogo_role = guild_member.get_role(852661951855460372)
+            bot_an_role = guild_member.get_role(840371852588220416)
+            server_an_role = guild_member.get_role(836312355029647450)
+
             if str(payload.emoji) == '🗿':
                 await member.remove_roles(nsfw_role)
             elif str(payload.emoji) == '😎':
                 await member.remove_roles(pogo_role)
+            elif str(payload.emoji) == '🤖':
+                await member.remove_roles(bot_an_role)
+            elif str(payload.emoji) == '⚒️':
+                await member.remove_roles(server_an_role)
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
